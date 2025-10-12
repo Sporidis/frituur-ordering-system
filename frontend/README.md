@@ -1,9 +1,11 @@
 # 🌍 PoC 1: Flutter i18n Implementation
 
 ## Overview
+
 This Proof of Concept demonstrates multilingual support in Flutter with seamless language switching between Dutch and English.
 
 ## Features Demonstrated
+
 - ✅ **Language Switching**: Toggle between Dutch and English without app restart
 - ✅ **Real-time UI Updates**: All text updates immediately when language changes
 - ✅ **State Management**: Language preference managed with Provider pattern
@@ -13,30 +15,35 @@ This Proof of Concept demonstrates multilingual support in Flutter with seamless
 ## Technical Implementation
 
 ### 1. Dependencies Added
+
 ```yaml
 dependencies:
   flutter_localizations:
     sdk: flutter
   provider: ^6.1.1
-  intl: ^0.19.0
+  intl:  ^0.20.2
 ```
 
 ### 2. Configuration Files
+
 - `l10n.yaml` - Flutter localization configuration
 - `lib/l10n/app_en.arb` - English translations
 - `lib/l10n/app_nl.arb` - Dutch translations
 
 ### 3. State Management
+
 - `LanguageProvider` - Manages current locale and language switching
 - Provider pattern for reactive UI updates
 
 ### 4. UI Components
+
 - Language toggle button in app bar
 - Popup menu for language selection
 - Sample frituur menu with localized content
 - Real-time language switching demonstration
 
 ## Success Criteria Met
+
 - [x] Language switching works without app restart
 - [x] All UI text updates immediately
 - [x] Language preference persists during session
@@ -44,6 +51,7 @@ dependencies:
 - [x] Works on both web and mobile platforms
 
 ## How to Test
+
 1. Run the Flutter app: `flutter run`
 2. Click the language icon in the app bar
 3. Select different language (English/Dutch)
@@ -54,6 +62,7 @@ dependencies:
 ## Evidence of Working Implementation
 
 ### 🎯 **Live Demo Commands**
+
 ```bash
 # Run the app
 flutter run
@@ -65,23 +74,14 @@ flutter run
 ```
 
 ### 📱 **Screenshots & Video Evidence**
-**English Version Screenshot:**
 
-**Dutch Version Screenshot:**
+| English Version | Dutch Version |
+|-----------------|---------------|
+| ![English Version](docs/screenshots/english-main.png) | ![Dutch Version](docs/screenshots/dutch-main.png) |
 
-**Language Switch Video/GIF:**
-- Show real-time transition between languages
-- Demonstrate instant UI updates
-- Show interactive elements (buttons, snackbars) working in both languages
-
-*To add screenshots:*
-1. Run `flutter run -d chrome` (or your preferred device)
-2. Take screenshots of both language versions
-3. Create a GIF showing the language switch
-4. Add files to `docs/screenshots/` folder
-5. Update this section with actual image links
 
 ### 🧪 **Test Results**
+
 ```bash
 # Build verification
 flutter analyze  # ✅ No issues found (1.4s)
@@ -90,6 +90,7 @@ flutter build apk --debug  # ✅ Build successful
 ```
 
 ### ⚡ **Performance Measurement**
+
 To measure actual language switch time:
 
 ```bash
@@ -105,6 +106,7 @@ flutter run --profile -d chrome
 ```
 
 **Expected Results:**
+
 - Language switch: <50ms (measured)
 - UI rebuild: <100ms (measured)
 - Memory usage: Stable (no leaks)
@@ -112,6 +114,7 @@ flutter run --profile -d chrome
 - Cross-platform builds: ✅
 
 **Automated Performance Tests:**
+
 ```bash
 # Run all performance tests
 flutter test test/simple_performance_test.dart test/ui_simple_test.dart
@@ -127,6 +130,7 @@ flutter test
 ```
 
 **Expected Output:**
+
 ```
 Language switch time: 2ms
 Language toggle time: 0ms
@@ -138,6 +142,7 @@ All tests passed!
 ```
 
 **Manual Performance Test:**
+
 1. Open app in Chrome DevTools
 2. Record performance while switching languages
 3. Look for the `notifyListeners()` call in the timeline
@@ -146,12 +151,14 @@ All tests passed!
 
 **Performance Test Results:**
 *Actual measured values:*
+
 - Language switch time: **33ms** ✅ (target: <50ms)
 - UI rebuild time: **12ms** ✅ (target: <100ms)
 - Memory usage: Stable ✅ (no leaks detected)
 - Test execution: Successful ✅
 
 ### 📊 **Translation Coverage**
+
 | Element | English | Dutch | Status |
 |---------|---------|-------|--------|
 | App Title | "Frituur Ordering System" | "Frituur Bestelsysteem" | ✅ |
@@ -161,6 +168,7 @@ All tests passed!
 | Navigation | "Select Language" | "Selecteer Taal" | ✅ |
 
 ### 💻 **Code Evidence**
+
 ```dart
 // Language switching in action
 final l10n = AppLocalizations.of(context)!;
@@ -173,6 +181,7 @@ Text(l10n.addToCart), // "Add to Cart" / "Toevoegen aan Winkelwagen"
 ```
 
 ### 🚀 **Quick Verification Commands**
+
 ```bash
 # 1. Verify no build errors
 flutter analyze
@@ -188,29 +197,3 @@ flutter run -d ios
 # 4. Build for production
 flutter build apk --release
 ```
-
-### 📋 **Manual Testing Checklist**
-- [x] App launches without errors
-- [x] Default language is English
-- [x] Language dropdown shows both options
-- [x] Switching to Dutch updates all text instantly
-- [ ] Switching back to English works
-- [ ] Menu items are properly translated
-- [ ] Button text changes with language
-- [ ] Snackbar messages are localized
-- [ ] No performance lag during switching
-
-## Next Steps
-This PoC validates that Flutter i18n is suitable for the frituur ordering system. The implementation can be extended to:
-- Add more languages (French, German)
-- Persist language preference across app restarts
-- Add RTL support for Arabic/Hebrew
-- Implement dynamic content translation from backend
-
-## Files Created
-- `lib/shared/providers/language_provider.dart`
-- `lib/features/poc/poc_i18n_page.dart`
-- `lib/l10n/app_en.arb`
-- `lib/l10n/app_nl.arb`
-- `l10n.yaml`
-- Updated `pubspec.yaml` and `main.dart`

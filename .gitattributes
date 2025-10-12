@@ -1,0 +1,123 @@
+# 🍟 Frituur Ordering System - Git Attributes
+# Ensures consistent line endings and file handling across platforms
+
+# ===========================================
+# Line Endings
+# ===========================================
+# Set default behavior to automatically normalize line endings
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout
+*.md text
+*.txt text
+*.json text
+*.yml text
+*.yaml text
+*.xml text
+*.html text
+*.css text
+*.js text
+*.ts text
+*.dart text
+*.sql text
+*.sh text
+*.bat text
+*.ps1 text
+
+# Declare files that will always have CRLF line endings on checkout
+*.sln text eol=crlf
+
+# Declare files that will always have LF line endings on checkout
+*.sh text eol=lf
+
+# ===========================================
+# Binary Files
+# ===========================================
+# Denote all files that are truly binary and should not be modified
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.mov binary
+*.mp4 binary
+*.mp3 binary
+*.flv binary
+*.fla binary
+*.swf binary
+*.gz binary
+*.zip binary
+*.7z binary
+*.ttf binary
+*.eot binary
+*.woff binary
+*.woff2 binary
+*.pyc binary
+*.pdf binary
+
+# ===========================================
+# Language Specific
+# ===========================================
+# Dart/Flutter
+*.dart text
+pubspec.yaml text
+pubspec.lock text
+
+# Node.js/TypeScript
+package.json text
+package-lock.json text
+yarn.lock text
+*.ts text
+*.js text
+*.tsx text
+*.jsx text
+
+# ===========================================
+# Database
+# ===========================================
+*.sql text
+*.db binary
+*.sqlite binary
+*.sqlite3 binary
+
+# ===========================================
+# Documentation
+# ===========================================
+*.md text
+*.rst text
+*.txt text
+
+# ===========================================
+# Configuration Files
+# ===========================================
+*.env text
+*.env.example text
+*.config.js text
+*.config.ts text
+docker-compose*.yml text
+Dockerfile text
+
+# ===========================================
+# Git Files
+# ===========================================
+.gitignore text
+.gitattributes text
+.gitmodules text
+
+# ===========================================
+# IDE Files (if accidentally committed)
+# ===========================================
+.vscode/* text
+.idea/* text
+*.iml text
+*.ipr text
+*.iws text
+
+# ===========================================
+# Large Files (use Git LFS if needed)
+# ===========================================
+# Uncomment if you need to track large files
+# *.psd filter=lfs diff=lfs merge=lfs -text
+# *.zip filter=lfs diff=lfs merge=lfs -text
+# *.tar.gz filter=lfs diff=lfs merge=lfs -text

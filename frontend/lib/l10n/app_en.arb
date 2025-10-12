@@ -1,0 +1,71 @@
+{
+  "@@locale": "en",
+  "appTitle": "Frituur Ordering System",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "menu": "Menu",
+  "@menu": {
+    "description": "Menu section title"
+  },
+  "cart": "Cart",
+  "@cart": {
+    "description": "Shopping cart section title"
+  },
+  "order": "Order",
+  "@order": {
+    "description": "Order section title"
+  },
+  "fries": "Fries",
+  "@fries": {
+    "description": "Fries menu item"
+  },
+  "price": "Price",
+  "@price": {
+    "description": "Price label"
+  },
+  "addToCart": "Add to Cart",
+  "@addToCart": {
+    "description": "Add to cart button text"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Language selection label"
+  },
+  "english": "English",
+  "@english": {
+    "description": "English language option"
+  },
+  "dutch": "Dutch",
+  "@dutch": {
+    "description": "Dutch language option"
+  },
+  "welcome": "Welcome to our Frituur!",
+  "@welcome": {
+    "description": "Welcome message"
+  },
+  "selectLanguage": "Select Language",
+  "@selectLanguage": {
+    "description": "Language selection prompt"
+  },
+  "total": "Total",
+  "@total": {
+    "description": "Total price label"
+  },
+  "checkout": "Checkout",
+  "@checkout": {
+    "description": "Checkout button text"
+  },
+  "burger": "Burger",
+  "@burger": {
+    "description": "Burger menu item"
+  },
+  "drinks": "Drinks",
+  "@drinks": {
+    "description": "Drinks menu item"
+  },
+  "addedToCart": "added to cart",
+  "@addedToCart": {
+    "description": "Add to cart snackbar text"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "@@locale": "nl",
+  "appTitle": "Frituur Bestelsysteem",
+  "menu": "Menu",
+  "cart": "Winkelwagen",
+  "order": "Bestelling",
+  "fries": "Frietjes",
+  "price": "Prijs",
+  "addToCart": "Toevoegen aan Winkelwagen",
+  "language": "Taal",
+  "english": "Engels",
+  "dutch": "Nederlands",
+  "welcome": "Welkom bij onze Frituur!",
+  "selectLanguage": "Selecteer Taal",
+  "total": "Totaal",
+  "checkout": "Afrekenen",
+  "burger": "Burger",
+  "drinks": "Drankjes",
+  "addedToCart": "toegevoegd aan winkelwagen"
+}

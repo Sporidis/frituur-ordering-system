@@ -4,7 +4,8 @@ import 'package:frituur_ordering_system/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'shared/providers/language_provider.dart';
-import 'features/poc/poc_i18n_page.dart';
+import 'shared/services/websocket_service.dart';
+import 'features/poc/poc_websocket_page.dart';
 
 void main() {
   runApp(const FrituurOrderingApp());
@@ -16,7 +17,10 @@ class FrituurOrderingApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => LanguageProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => LanguageProvider()),
+        ChangeNotifierProvider(create: (_) => WebSocketService()),
+      ],
       child: Consumer<LanguageProvider>(
         builder: (context, languageProvider, child) {
           return MaterialApp(
@@ -48,7 +52,7 @@ class FrituurOrderingApp extends StatelessWidget {
             ),
 
             // App routes
-            home: const PocI18nPage(),
+            home: const PocWebSocketPage(),
           );
         },
       ),

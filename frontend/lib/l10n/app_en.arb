@@ -67,5 +67,201 @@
   "addedToCart": "added to cart",
   "@addedToCart": {
     "description": "Add to cart snackbar text"
+  },
+  "connectedToBackend": "Connected to Backend",
+  "@connectedToBackend": {
+    "description": "WebSocket connection status when connected"
+  },
+  "disconnected": "Disconnected",
+  "@disconnected": {
+    "description": "WebSocket connection status when disconnected"
+  },
+  "websocketControls": "WebSocket Controls",
+  "@websocketControls": {
+    "description": "WebSocket controls section title"
+  },
+  "connect": "Connect",
+  "@connect": {
+    "description": "Connect button text"
+  },
+  "disconnect": "Disconnect",
+  "@disconnect": {
+    "description": "Disconnect button text"
+  },
+  "orderManagement": "Order Management",
+  "@orderManagement": {
+    "description": "Order management section title"
+  },
+  "customerName": "Customer Name",
+  "@customerName": {
+    "description": "Customer name input label"
+  },
+  "createSampleOrder": "Create Sample Order",
+  "@createSampleOrder": {
+    "description": "Create sample order button text"
+  },
+  "createMultipleSampleOrders": "Create Multiple Sample Orders",
+  "@createMultipleSampleOrders": {
+    "description": "Create multiple sample orders button text"
+  },
+  "selectOrderToTrack": "Select Order to Track:",
+  "@selectOrderToTrack": {
+    "description": "Order selection prompt"
+  },
+  "chooseAnOrder": "Choose an order",
+  "@chooseAnOrder": {
+    "description": "Order dropdown placeholder"
+  },
+  "joinOrderRoom": "Join Order Room",
+  "@joinOrderRoom": {
+    "description": "Join order room button text"
+  },
+  "leaveOrderRoom": "Leave Order Room",
+  "@leaveOrderRoom": {
+    "description": "Leave order room button text"
+  },
+  "realTimeStatusUpdates": "Real-time Status Updates",
+  "@realTimeStatusUpdates": {
+    "description": "Real-time status updates section title"
+  },
+  "noStatusUpdatesYet": "No status updates yet. Create an order and join its room to see real-time updates.",
+  "@noStatusUpdatesYet": {
+    "description": "Message when no status updates are available"
+  },
+  "orderLabel": "Order:",
+  "@orderLabel": {
+    "description": "Order label in status update"
+  },
+  "statusLabel": "Status:",
+  "@statusLabel": {
+    "description": "Status label in status update"
+  },
+  "messageLabel": "Message:",
+  "@messageLabel": {
+    "description": "Message label in status update"
+  },
+  "timeLabel": "Time:",
+  "@timeLabel": {
+    "description": "Time label in status update"
+  },
+  "kitchenSimulation": "Kitchen Simulation",
+  "@kitchenSimulation": {
+    "description": "Kitchen simulation section title"
+  },
+  "simulateKitchenWorkflow": "Simulate Kitchen Workflow",
+  "@simulateKitchenWorkflow": {
+    "description": "Simulate kitchen workflow button text"
+  },
+  "orderCreated": "Order created: {orderId}",
+  "@orderCreated": {
+    "description": "Order created success message",
+    "placeholders": {
+      "orderId": {
+        "type": "String",
+        "description": "The ID of the created order"
+      }
+    }
+  },
+  "createdSampleOrders": "Created {count} sample orders",
+  "@createdSampleOrders": {
+    "description": "Multiple orders created success message",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "description": "Number of orders created"
+      }
+    }
+  },
+  "kitchenWorkflowStarted": "Kitchen workflow started",
+  "@kitchenWorkflowStarted": {
+    "description": "Kitchen workflow started success message"
+  },
+  "failedToStartKitchenWorkflow": "Failed to start kitchen workflow",
+  "@failedToStartKitchenWorkflow": {
+    "description": "Kitchen workflow failed error message"
+  },
+  "errorCreatingOrder": "Error creating order: {error}",
+  "@errorCreatingOrder": {
+    "description": "Order creation error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "The error message"
+      }
+    }
+  },
+  "errorCreatingSampleOrders": "Error creating sample orders: {error}",
+  "@errorCreatingSampleOrders": {
+    "description": "Sample orders creation error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "The error message"
+      }
+    }
+  },
+  "errorGeneric": "Error: {error}",
+  "@errorGeneric": {
+    "description": "Generic error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "The error message"
+      }
+    }
+  },
+  "orderStatusUpdate": "Order {orderId}: {status}",
+  "@orderStatusUpdate": {
+    "description": "Order status update notification",
+    "placeholders": {
+      "orderId": {
+        "type": "String",
+        "description": "The order ID"
+      },
+      "status": {
+        "type": "String",
+        "description": "The order status"
+      }
+    }
+  },
+  "statusPending": "Pending",
+  "@statusPending": {
+    "description": "Order status: pending"
+  },
+  "statusInProgress": "In Progress",
+  "@statusInProgress": {
+    "description": "Order status: in progress"
+  },
+  "statusReady": "Ready",
+  "@statusReady": {
+    "description": "Order status: ready"
+  },
+  "statusCompleted": "Completed",
+  "@statusCompleted": {
+    "description": "Order status: completed"
+  },
+  "kitchenStartedPreparing": "Kitchen started preparing your order",
+  "@kitchenStartedPreparing": {
+    "description": "Message when kitchen starts preparing order"
+  },
+  "orderReadyForPickup": "Your order is ready for pickup!",
+  "@orderReadyForPickup": {
+    "description": "Message when order is ready for pickup"
+  },
+  "statusChangedToPending": "Order status changed to pending",
+  "@statusChangedToPending": {
+    "description": "Message when order status changes to pending"
+  },
+  "statusChangedToInProgress": "Order status changed to in progress",
+  "@statusChangedToInProgress": {
+    "description": "Message when order status changes to in progress"
+  },
+  "statusChangedToReady": "Order status changed to ready",
+  "@statusChangedToReady": {
+    "description": "Message when order status changes to ready"
+  },
+  "statusChangedToCompleted": "Order status changed to completed",
+  "@statusChangedToCompleted": {
+    "description": "Message when order status changes to completed"
   }
 }

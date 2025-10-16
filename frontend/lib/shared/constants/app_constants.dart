@@ -1,6 +1,11 @@
 // Application constants for the frituur ordering system
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AppConstants {
+  // Stripe Configuration
+  static String get stripePublishableKey =>
+      dotenv.env['STRIPE_PUBLISHABLE_KEY'] ?? 'pk_test_51234567890abcdef';
+
   // API Configuration
   static const String baseUrl = 'http://localhost:3000';
   static const Duration connectionTimeout = Duration(seconds: 30);

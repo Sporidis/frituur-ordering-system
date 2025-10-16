@@ -9,13 +9,11 @@ export class OrderService {
 
   constructor(private orderGateway: OrderGateway) {}
 
-  // Create a new order
   createOrder(customerName: string, items: Omit<OrderItem, 'id'>[]): Order {
     const orderId = `#${this.orderCounter.toString().padStart(3, '0')}`;
     this.orderCounter++;
     const now = new Date();
 
-    // Calculate total amount
     const totalAmount = items.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0,
@@ -48,7 +46,6 @@ export class OrderService {
     return order;
   }
 
-  // Update order status
   updateOrderStatus(
     orderId: string,
     status: OrderStatus,
@@ -85,24 +82,20 @@ export class OrderService {
     return true;
   }
 
-  // Get order by ID
   getOrder(orderId: string): Order | undefined {
     return this.orders.get(orderId);
   }
 
-  // Get all orders
   getAllOrders(): Order[] {
     return Array.from(this.orders.values());
   }
 
-  // Get orders by status
   getOrdersByStatus(status: OrderStatus): Order[] {
     return Array.from(this.orders.values()).filter(
       (order) => order.status === status,
     );
   }
 
-  // Simulate kitchen workflow (for PoC demonstration)
   simulateKitchenWorkflow() {
     this.logger.log('Starting kitchen workflow simulation...');
 
@@ -125,7 +118,7 @@ export class OrderService {
           OrderStatus.READY,
           'order_ready_for_pickup',
         );
-      }, 15000); // 15 seconds for demo
+      }, 15000); // 15 seconds
     }
 
     // Process in-progress orders

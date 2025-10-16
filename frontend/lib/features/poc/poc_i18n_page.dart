@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frituur_ordering_system/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:frituur_ordering_system/l10n/app_localizations.dart';
 
 import '../../shared/providers/language_provider.dart';
 
@@ -101,7 +101,7 @@ class PocI18nPage extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-            // Sample Menu Items (to demonstrate translations)
+            // Sample Menu Items
             Text(l10n.menu, style: Theme.of(context).textTheme.headlineSmall),
             const SizedBox(height: 16),
 

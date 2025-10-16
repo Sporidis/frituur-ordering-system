@@ -10,7 +10,6 @@ import {
 import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
 
-// Order status types
 export enum OrderStatus {
   PENDING = 'pending',
   IN_PROGRESS = 'in_progress',
@@ -18,7 +17,6 @@ export enum OrderStatus {
   COMPLETED = 'completed',
 }
 
-// Order interface
 export interface Order {
   id: string;
   customerName: string;
@@ -50,7 +48,7 @@ export interface JoinOrderRoomPayload {
 
 @WebSocketGateway({
   cors: {
-    origin: '*', // In production, specify your frontend URL
+    origin: '*',
   },
 })
 export class OrderGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -58,7 +56,7 @@ export class OrderGateway implements OnGatewayConnection, OnGatewayDisconnect {
   server: Server;
 
   private logger: Logger = new Logger('OrderGateway');
-  private connectedClients: Map<string, Set<string>> = new Map(); // orderId -> Set of socketIds
+  private connectedClients: Map<string, Set<string>> = new Map();
 
   handleConnection(client: Socket) {
     this.logger.log(`Client connected: ${client.id}`);
@@ -83,10 +81,8 @@ export class OrderGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {
     const { orderId } = payload;
 
-    // Join the specific order room
     client.join(`order_${orderId}`);
 
-    // Track connected clients for this order
     if (!this.connectedClients.has(orderId)) {
       this.connectedClients.set(orderId, new Set());
     }
@@ -94,7 +90,6 @@ export class OrderGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     this.logger.log(`Client ${client.id} joined order room: ${orderId}`);
 
-    // Send confirmation back to client
     client.emit('joined_order_room', {
       orderId,
       message: 'Successfully joined order room',
@@ -108,10 +103,8 @@ export class OrderGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {
     const { orderId } = payload;
 
-    // Leave the specific order room
     client.leave(`order_${orderId}`);
 
-    // Remove client from tracking
     const clients = this.connectedClients.get(orderId);
     if (clients) {
       clients.delete(client.id);

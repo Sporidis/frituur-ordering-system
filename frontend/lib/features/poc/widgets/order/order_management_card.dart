@@ -58,7 +58,6 @@ class _OrderManagementCardState extends State<OrderManagementCard> {
                 border: const OutlineInputBorder(),
               ),
             ),
-
             const SizedBox(height: 16),
 
             // Create order button
@@ -74,7 +73,6 @@ class _OrderManagementCardState extends State<OrderManagementCard> {
                 ),
               ),
             ),
-
             const SizedBox(height: 8),
 
             // Create multiple orders button
@@ -90,7 +88,6 @@ class _OrderManagementCardState extends State<OrderManagementCard> {
                 ),
               ),
             ),
-
             const SizedBox(height: 16),
 
             // Order selection
@@ -120,7 +117,6 @@ class _OrderManagementCardState extends State<OrderManagementCard> {
                   });
                 },
               ),
-
               const SizedBox(height: 16),
 
               // Join/Leave room buttons

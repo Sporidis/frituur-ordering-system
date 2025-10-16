@@ -263,5 +263,223 @@
   "statusChangedToCompleted": "Order status changed to completed",
   "@statusChangedToCompleted": {
     "description": "Message when order status changes to completed"
+  },
+  "paymentPoc": "Payment PoC",
+  "@paymentPoc": {
+    "description": "Payment proof of concept page title"
+  },
+  "paymentDetails": "Payment Details",
+  "@paymentDetails": {
+    "description": "Payment details section title"
+  },
+  "amount": "Amount (€)",
+  "@amount": {
+    "description": "Amount input field label"
+  },
+  "pleaseEnterAmount": "Please enter an amount",
+  "@pleaseEnterAmount": {
+    "description": "Amount validation error message"
+  },
+  "pleaseEnterValidAmount": "Please enter a valid amount",
+  "@pleaseEnterValidAmount": {
+    "description": "Valid amount validation error message"
+  },
+  "pleaseEnterCustomerName": "Please enter customer name",
+  "@pleaseEnterCustomerName": {
+    "description": "Customer name validation error message"
+  },
+  "orderId": "Order ID",
+  "@orderId": {
+    "description": "Order ID input field label"
+  },
+  "pleaseEnterOrderId": "Please enter order ID",
+  "@pleaseEnterOrderId": {
+    "description": "Order ID validation error message"
+  },
+  "creating": "Creating...",
+  "@creating": {
+    "description": "Creating payment intent loading text"
+  },
+  "createPaymentIntent": "Create Payment Intent",
+  "@createPaymentIntent": {
+    "description": "Create payment intent button text"
+  },
+  "createDemoPayment": "Create Demo Payment (€19.99)",
+  "@createDemoPayment": {
+    "description": "Create demo payment button text"
+  },
+  "paymentIntentCreated": "Payment Intent Created",
+  "@paymentIntentCreated": {
+    "description": "Payment intent created section title"
+  },
+  "id": "ID:",
+  "@id": {
+    "description": "ID label"
+  },
+  "amountLabel": "Amount:",
+  "@amountLabel": {
+    "description": "Amount label"
+  },
+  "currency": "Currency:",
+  "@currency": {
+    "description": "Currency label"
+  },
+  "status": "Status:",
+  "@status": {
+    "description": "Status label"
+  },
+  "processing": "Processing...",
+  "@processing": {
+    "description": "Processing payment loading text"
+  },
+  "processPayment": "Process Payment",
+  "@processPayment": {
+    "description": "Process payment button text"
+  },
+  "paymentResult": "Payment Result",
+  "@paymentResult": {
+    "description": "Payment result section title"
+  },
+  "testCardNumbers": "Test Card Numbers",
+  "@testCardNumbers": {
+    "description": "Test card numbers section title"
+  },
+  "useTestCardNumbers": "Use these test card numbers for testing:",
+  "@useTestCardNumbers": {
+    "description": "Test card numbers instruction text"
+  },
+  "visaTestCard": "• Visa: 4242424242424242",
+  "@visaTestCard": {
+    "description": "Visa test card number"
+  },
+  "mastercardTestCard": "• Mastercard: 5555555555554444",
+  "@mastercardTestCard": {
+    "description": "Mastercard test card number"
+  },
+  "declinedTestCard": "• Declined: 4000000000000002",
+  "@declinedTestCard": {
+    "description": "Declined test card number"
+  },
+  "testCardInstructions": "• Any future date, any CVC",
+  "@testCardInstructions": {
+    "description": "Test card date and CVC instructions"
+  },
+  "failedToInitializeStripe": "Failed to initialize Stripe: {error}",
+  "@failedToInitializeStripe": {
+    "description": "Stripe initialization error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "The error message"
+      }
+    }
+  },
+  "paymentIntentCreatedSuccess": "Payment intent created: {id}",
+  "@paymentIntentCreatedSuccess": {
+    "description": "Payment intent created success message",
+    "placeholders": {
+      "id": {
+        "type": "String",
+        "description": "The payment intent ID"
+      }
+    }
+  },
+  "failedToCreatePaymentIntent": "Failed to create payment intent",
+  "@failedToCreatePaymentIntent": {
+    "description": "Payment intent creation failure message"
+  },
+  "paymentSuccessful": "Payment successful! 🎉",
+  "@paymentSuccessful": {
+    "description": "Payment success message"
+  },
+  "paymentFailed": "Payment failed: {error}",
+  "@paymentFailed": {
+    "description": "Payment failure message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "The error message"
+      }
+    }
+  },
+  "errorProcessingPayment": "Error processing payment: {error}",
+  "@errorProcessingPayment": {
+    "description": "Payment processing error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "description": "The error message"
+      }
+    }
+  },
+  "demoPaymentIntentCreated": "Demo payment intent created: {id}",
+  "@demoPaymentIntentCreated": {
+    "description": "Demo payment intent created success message",
+    "placeholders": {
+      "id": {
+        "type": "String",
+        "description": "The payment intent ID"
+      }
+    }
+  },
+  "failedToCreateDemoPayment": "Failed to create demo payment",
+  "@failedToCreateDemoPayment": {
+    "description": "Demo payment creation failure message"
+  },
+  "customer": "Customer",
+  "@customer": {
+    "description": "Default customer name"
+  },
+  "pocs": "PoCs",
+  "@pocs": {
+    "description": "Proof of concepts page title"
+  },
+  "selectPocToTest": "Select a PoC to test different features of the Frituur Ordering System",
+  "@selectPocToTest": {
+    "description": "Description text for PoC selection"
+  },
+  "poc1I18n": "PoC 1: i18n",
+  "@poc1I18n": {
+    "description": "Title for internationalization PoC"
+  },
+  "poc1I18nDescription": "Internationalization\n(Dutch/English)",
+  "@poc1I18nDescription": {
+    "description": "Description for internationalization PoC"
+  },
+  "i18nIntegratedInAllPocs": "i18n is integrated in all PoCs",
+  "@i18nIntegratedInAllPocs": {
+    "description": "Message when clicking on i18n PoC"
+  },
+  "poc2Websocket": "PoC 2: WebSocket",
+  "@poc2Websocket": {
+    "description": "Title for WebSocket PoC"
+  },
+  "poc2WebsocketDescription": "Real-time Order Updates\n& Kitchen Simulation",
+  "@poc2WebsocketDescription": {
+    "description": "Description for WebSocket PoC"
+  },
+  "poc3Stripe": "PoC 3: Stripe",
+  "@poc3Stripe": {
+    "description": "Title for Stripe payment PoC"
+  },
+  "poc3StripeDescription": "Payment Processing\n& Card Payments",
+  "@poc3StripeDescription": {
+    "description": "Description for Stripe payment PoC"
+  },
+  "poc4Modular": "PoC 4: Modular",
+  "@poc4Modular": {
+    "description": "Title for modular architecture PoC"
+  },
+  "poc4ModularDescription": "Clean Architecture\n& Module Boundaries",
+  "@poc4ModularDescription": {
+    "description": "Description for modular architecture PoC"
+  },
+  "comingSoon": "COMING SOON",
+  "@comingSoon": {
+    "description": "Coming soon badge text"
+  },
+  "comingSoonModularPoc": "Coming Soon: Modular Monolith PoC",
+  "@comingSoonModularPoc": {
+    "description": "Message when clicking on modular PoC"
   }
 }

@@ -90,7 +90,7 @@ class ApiService {
     String? message,
   }) async {
     try {
-      final response = await http.post(
+      final response = await http.patch(
         Uri.parse('$baseUrl/orders/$orderId/status'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'status': status.name, 'message': message}),
@@ -138,9 +138,7 @@ class ApiService {
   // Simulate kitchen workflow
   static Future<bool> simulateKitchenWorkflow() async {
     try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/orders/simulate/kitchen-workflow'),
-      );
+      final response = await http.post(Uri.parse('$baseUrl/kitchen/simulate'));
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = jsonDecode(response.body);

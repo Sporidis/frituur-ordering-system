@@ -1,16 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PaymentsModule } from '@modules/payments/payments.module';
-import { PaymentController } from '@modules/payments/presentation/payment.controller';
-import { PaymentApplicationService } from '@modules/payments/application/payment-application.service';
-import { InMemoryPaymentRepository } from '@modules/payments/infrastructure/payment-repository.impl';
-import { StripePaymentGateway } from '@modules/payments/infrastructure/stripe-payment-gateway';
+import { I18nModule } from '@modules/i18n/i18n.module';
+import { PAYMENT_NEST_CONTROLLERS } from '@modules/payments/presentation/http/controllers';
+import { PAYMENT_REPOSITORY } from '@modules/payments/domain/payment-repository.interface';
+import { PAYMENT_GATEWAY } from '@modules/payments/domain/ports/payment-gateway.port';
 
 describe('PaymentsModule', () => {
   let module: TestingModule;
 
   beforeEach(async () => {
     module = await Test.createTestingModule({
-      imports: [PaymentsModule],
+      imports: [I18nModule, PaymentsModule],
     }).compile();
   });
 
@@ -18,42 +18,15 @@ describe('PaymentsModule', () => {
     expect(module).toBeDefined();
   });
 
-  it('should provide PaymentController', () => {
-    const controller = module.get<PaymentController>(PaymentController);
-    expect(controller).toBeDefined();
+  it('should register HTTP controllers', () => {
+    for (const ctrl of PAYMENT_NEST_CONTROLLERS) {
+      expect(module.get(ctrl)).toBeDefined();
+    }
   });
 
-  it('should provide PaymentApplicationService', () => {
-    const service = module.get<PaymentApplicationService>(
-      PaymentApplicationService,
-    );
-    expect(service).toBeDefined();
-  });
-
-  it('should provide InMemoryPaymentRepository', () => {
-    const repository = module.get<InMemoryPaymentRepository>(
-      InMemoryPaymentRepository,
-    );
-    expect(repository).toBeDefined();
-  });
-
-  it('should provide StripePaymentGateway', () => {
-    const gateway = module.get<StripePaymentGateway>(StripePaymentGateway);
-    expect(gateway).toBeDefined();
-  });
-
-  it('should export PaymentApplicationService', () => {
-    const exportedService = module.get<PaymentApplicationService>(
-      PaymentApplicationService,
-    );
-    expect(exportedService).toBeDefined();
-  });
-
-  it('should export InMemoryPaymentRepository', () => {
-    const exportedRepository = module.get<InMemoryPaymentRepository>(
-      InMemoryPaymentRepository,
-    );
-    expect(exportedRepository).toBeDefined();
+  it('should export repository and gateway tokens', () => {
+    expect(module.get(PAYMENT_REPOSITORY)).toBeDefined();
+    expect(module.get(PAYMENT_GATEWAY)).toBeDefined();
   });
 
   it('should have correct module structure', () => {

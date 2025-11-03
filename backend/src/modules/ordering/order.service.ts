@@ -1,13 +1,20 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Optional, Inject } from '@nestjs/common';
 import { Order, OrderItem, OrderStatus } from './domain/order.types';
 import { OrderEntity } from './domain/order.entity';
 import { OrderRepository } from './domain/repositories/order.repository';
+import { OrderTrackingGateway } from './infrastructure/order-tracking.gateway';
 
 @Injectable()
 export class OrderService implements OrderRepository {
   private logger: Logger = new Logger('OrderService');
   private orders: Map<string, Order> = new Map();
   private orderCounter = 1;
+
+  constructor(
+    @Optional()
+    @Inject(OrderTrackingGateway)
+    private readonly gateway?: OrderTrackingGateway,
+  ) {}
 
   createOrder(
     customerName: string,
@@ -24,6 +31,12 @@ export class OrderService implements OrderRepository {
     });
     this.orders.set(orderId, entity);
     this.logger.log(`Created new order: ${orderId}`);
+
+    // Emit WebSocket event for new order
+    if (this.gateway) {
+      this.gateway.emitNewOrder(entity);
+    }
+
     return entity;
   }
 
@@ -56,6 +69,11 @@ export class OrderService implements OrderRepository {
       `Updated order ${orderId} status: ${oldStatus} -> ${status} ${message ? '(' + message + ')' : ''}`,
     );
 
+    // Emit WebSocket event for status update
+    if (this.gateway) {
+      this.gateway.emitOrderStatusUpdate(orderId, order);
+    }
+
     return true;
   }
 
@@ -71,39 +89,6 @@ export class OrderService implements OrderRepository {
     return Array.from(this.orders.values()).filter(
       (order) => order.status === status,
     );
-  }
-
-  simulateKitchenWorkflow() {
-    this.logger.log('Starting kitchen workflow simulation...');
-
-    const pendingOrders = this.getOrdersByStatus(OrderStatus.PENDING);
-    const inProgressOrders = this.getOrdersByStatus(OrderStatus.IN_PROGRESS);
-
-    if (pendingOrders.length > 0) {
-      const order = pendingOrders[0];
-      this.updateOrderStatus(
-        order.id,
-        OrderStatus.IN_PROGRESS,
-        'kitchen_started_preparing',
-      );
-
-      setTimeout(() => {
-        this.updateOrderStatus(
-          order.id,
-          OrderStatus.READY,
-          'order_ready_for_pickup',
-        );
-      }, 15000);
-    }
-
-    if (inProgressOrders.length > 0) {
-      const order = inProgressOrders[0];
-      this.updateOrderStatus(
-        order.id,
-        OrderStatus.READY,
-        'Your order is ready for pickup!',
-      );
-    }
   }
 
   getOrderStats() {

@@ -44,6 +44,11 @@ export class ProcessPaymentUseCase implements UseCase<ProcessPaymentDto, any> {
     }
 
     await this.paymentRepository.save(payment);
-    return { paymentId: payment.id, status: payment.status };
+    return {
+      paymentId: payment.id,
+      status: payment.status,
+      amount: payment.amount.amountInCents,
+      currency: payment.amount.currency.toLowerCase(),
+    };
   }
 }

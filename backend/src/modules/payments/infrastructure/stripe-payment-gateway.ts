@@ -104,18 +104,31 @@ export class StripePaymentGateway implements PaymentGatewayPort {
     reason?: string,
   ): Promise<{ refundId: string; status: string; amount?: number }> {
     try {
-      const refund = await this.stripe.refunds.create({
+      // Build refund params - only include amount if provided (for partial refund)
+      // If amount is undefined, Stripe will refund the full amount
+      const refundParams: any = {
         payment_intent: paymentIntentId,
-        amount: amount,
-        reason: reason as any,
-      });
+      };
+
+      // If amount is provided, convert to cents and include it
+      if (amount !== undefined && amount !== null) {
+        // Amount should be in cents for Stripe
+        refundParams.amount = Math.round(amount * 100);
+      }
+
+      // Only include reason if provided
+      if (reason) {
+        refundParams.reason = reason;
+      }
+
+      const refund = await this.stripe.refunds.create(refundParams);
 
       this.logger.log(`Created Stripe refund: ${refund.id}`);
 
       return {
         refundId: refund.id,
         status: refund.status || 'unknown',
-        amount: refund.amount,
+        amount: refund.amount ? refund.amount / 100 : undefined, // Convert back to dollars
       };
     } catch (error) {
       this.logger.error('Error creating Stripe refund:', error);

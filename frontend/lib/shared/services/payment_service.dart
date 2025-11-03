@@ -102,6 +102,7 @@ class PaymentService {
           body: jsonEncode({
             'paymentId': paymentIntentId,
             'paymentMethodId': 'pm_card_visa',
+            'customerName': customerName,
           }),
         );
         if (resp.statusCode == 200) {
@@ -221,31 +222,32 @@ class PaymentService {
     }
   }
 
-  static Future<List<payment.PaymentIntent>> getPaymentHistory({
-    int limit = 10,
-    int offset = 0,
-  }) async {
-    try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/payments/history?limit=$limit&offset=$offset'),
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        if (data['success'] == true) {
-          final List<dynamic> paymentsJson = data['payments'];
-          return paymentsJson
-              .map((json) => payment.PaymentIntent.fromJson(json))
-              .toList();
-        } else {
-          return [];
-        }
-      } else {
-        throw Exception('HTTP ${response.statusCode}: ${response.body}');
-      }
-    } catch (e) {
-      debugPrint('❌ Error getting payment history: $e');
-      return [];
-    }
-  }
+  // Note: Payment history endpoint not implemented in backend for POC
+  // static Future<List<payment.PaymentIntent>> getPaymentHistory({
+  //   int limit = 10,
+  //   int offset = 0,
+  // }) async {
+  //   try {
+  //     final response = await http.get(
+  //       Uri.parse('$baseUrl/payments/history?limit=$limit&offset=$offset'),
+  //     );
+  //
+  //     if (response.statusCode == 200) {
+  //       final data = jsonDecode(response.body);
+  //       if (data['success'] == true) {
+  //         final List<dynamic> paymentsJson = data['payments'];
+  //         return paymentsJson
+  //             .map((json) => payment.PaymentIntent.fromJson(json))
+  //             .toList();
+  //       } else {
+  //         return [];
+  //       }
+  //     } else {
+  //       throw Exception('HTTP ${response.statusCode}: ${response.body}');
+  //     }
+  //   } catch (e) {
+  //     debugPrint('❌ Error getting payment history: $e');
+  //     return [];
+  //   }
+  // }
 }

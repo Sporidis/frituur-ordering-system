@@ -8,7 +8,11 @@ export interface OrderRepository {
     items: Omit<OrderItem, 'id'>[],
     totalAmount?: number,
   ): Order;
-  updateOrderStatus(orderId: string, status: OrderStatus): boolean;
+  updateOrderStatus(
+    orderId: string,
+    status: OrderStatus,
+    message?: string,
+  ): boolean;
   getOrder(orderId: string): Order | undefined;
   getAllOrders(): Order[];
   getOrderStats(): any;

@@ -20,6 +20,14 @@ export class GetAllOrdersEndpoint implements Endpoint {
       customerName: o.customerName,
       totalAmount: o.totalAmount,
       status: o.status,
+      items: o.items.map((it) => ({
+        id: it.id,
+        name: it.name,
+        price: it.price,
+        quantity: it.quantity,
+      })),
+      estimatedReadyTime: o.estimatedReadyTime.toISOString(),
+      createdAt: o.createdAt.toISOString(),
     }));
     return OrderPresenters.list(views, title);
   }

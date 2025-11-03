@@ -42,8 +42,7 @@ class AppConstants {
   // API Endpoints
   static const String apiOrders = '/orders';
   static const String apiOrdersDemo = '/orders/demo/create-sample';
-  static const String apiKitchenSimulation =
-      '/orders/simulate/kitchen-workflow';
+  static const String apiKitchenSimulation = '/kitchen/simulate';
   static const String apiOrderStats = '/orders/stats/overview';
 }
 

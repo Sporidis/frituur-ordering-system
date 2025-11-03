@@ -34,6 +34,14 @@ export class GetOrderEndpoint implements Endpoint {
       customerName: order.customerName,
       totalAmount: order.totalAmount,
       status: order.status,
+      items: order.items.map((it) => ({
+        id: it.id,
+        name: it.name,
+        price: it.price,
+        quantity: it.quantity,
+      })),
+      estimatedReadyTime: order.estimatedReadyTime.toISOString(),
+      createdAt: order.createdAt.toISOString(),
     };
     return OrderPresenters.single(orderView, title);
   }

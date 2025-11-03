@@ -41,8 +41,8 @@ class WebSocketService extends ChangeNotifier {
   Future<void> connect() async {
     final host = getUrlFromHost();
     try {
-      _socket = io.io('ws://$host:3000', <String, dynamic>{
-        'transports': ['websocket'],
+      _socket = io.io('http://$host:3000', <String, dynamic>{
+        'transports': ['websocket', 'polling'],
         'autoConnect': false,
         'reconnection': true,
         'reconnectionAttempts': 5,

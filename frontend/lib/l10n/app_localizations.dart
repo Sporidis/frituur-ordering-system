@@ -712,6 +712,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Coming Soon: Modular Monolith PoC'**
   String get comingSoonModularPoc;
+
+  /// Section title for PoC testing controls
+  ///
+  /// In en, this message translates to:
+  /// **'PoC Testing'**
+  String get pocTesting;
+
+  /// Ping button label
+  ///
+  /// In en, this message translates to:
+  /// **'Ping'**
+  String get ping;
+
+  /// Stats button label
+  ///
+  /// In en, this message translates to:
+  /// **'Stats'**
+  String get stats;
+
+  /// Stability test button label
+  ///
+  /// In en, this message translates to:
+  /// **'Stability Test'**
+  String get stabilityTest;
+
+  /// Loading label while testing
+  ///
+  /// In en, this message translates to:
+  /// **'Testing...'**
+  String get testingEllipsis;
+
+  /// Title for last pong info card
+  ///
+  /// In en, this message translates to:
+  /// **'Last Pong'**
+  String get lastPong;
+
+  /// Title for connection stats info card
+  ///
+  /// In en, this message translates to:
+  /// **'Connection Stats'**
+  String get connectionStatsTitle;
+
+  /// Snackbar: ping sent
+  ///
+  /// In en, this message translates to:
+  /// **'🏓 Ping sent to server'**
+  String get pingSentToServer;
+
+  /// Snackbar: requesting stats
+  ///
+  /// In en, this message translates to:
+  /// **'📊 Requesting connection statistics...'**
+  String get requestingConnectionStatistics;
+
+  /// Snackbar: starting stability test
+  ///
+  /// In en, this message translates to:
+  /// **'🧪 Starting 30-second stability test...'**
+  String get startingStabilityTest;
+
+  /// Snackbar: stability test completed
+  ///
+  /// In en, this message translates to:
+  /// **'✅ Stability test completed'**
+  String get stabilityTestCompleted;
+
+  /// Snackbar: connection lost during stability test
+  ///
+  /// In en, this message translates to:
+  /// **'❌ Connection lost during stability test'**
+  String get connectionLostDuringStabilityTest;
+
+  /// Label showing the current language name
+  ///
+  /// In en, this message translates to:
+  /// **'Current Language: {language}'**
+  String currentLanguage(String language);
+
+  /// Active connections label
+  ///
+  /// In en, this message translates to:
+  /// **'Active:'**
+  String get statsActive;
+
+  /// Total connections label
+  ///
+  /// In en, this message translates to:
+  /// **'Total:'**
+  String get statsTotal;
+
+  /// Max concurrent connections label
+  ///
+  /// In en, this message translates to:
+  /// **'Max:'**
+  String get statsMax;
+
+  /// Refund button label
+  ///
+  /// In en, this message translates to:
+  /// **'Refund'**
+  String get refund;
+
+  /// Hint text for optional refund amount
+  ///
+  /// In en, this message translates to:
+  /// **'Optional: specify refund amount (defaults to full)'**
+  String get optionalRefundAmountHint;
+
+  /// Refund success message
+  ///
+  /// In en, this message translates to:
+  /// **'Refund successful'**
+  String get refundSuccessful;
+
+  /// Refund failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Refund failed'**
+  String get refundFailed;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

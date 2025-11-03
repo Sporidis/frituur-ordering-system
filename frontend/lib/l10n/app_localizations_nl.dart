@@ -338,4 +338,66 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get comingSoonModularPoc => 'Binnenkort: Modulaire Monolith PoC';
+
+  @override
+  String get pocTesting => 'PoC Testen';
+
+  @override
+  String get ping => 'Ping';
+
+  @override
+  String get stats => 'Statistieken';
+
+  @override
+  String get stabilityTest => 'Stabiliteitstest';
+
+  @override
+  String get testingEllipsis => 'Testen...';
+
+  @override
+  String get lastPong => 'Laatste Pong';
+
+  @override
+  String get connectionStatsTitle => 'Verbindingsstatistieken';
+
+  @override
+  String get pingSentToServer => '🏓 Ping naar server verzonden';
+
+  @override
+  String get requestingConnectionStatistics => '📊 Verbindingsstatistieken opvragen...';
+
+  @override
+  String get startingStabilityTest => '🧪 30-seconden stabiliteitstest starten...';
+
+  @override
+  String get stabilityTestCompleted => '✅ Stabiliteitstest voltooid';
+
+  @override
+  String get connectionLostDuringStabilityTest => '❌ Verbinding verbroken tijdens stabiliteitstest';
+
+  @override
+  String currentLanguage(String language) {
+    return 'Huidige taal: $language';
+  }
+
+  @override
+  String get statsActive => 'Actief:';
+
+  @override
+  String get statsTotal => 'Totaal:';
+
+  @override
+  String get statsMax => 'Max:';
+
+  @override
+  String get refund => 'Terugbetaling';
+
+  @override
+  String get optionalRefundAmountHint => 'Optioneel: specificeer terugbetalingsbedrag (standaard volledig)';
+
+  @override
+  String get refundSuccessful => 'Terugbetaling succesvol';
+
+  @override
+  String get refundFailed => 'Terugbetaling mislukt';
 }

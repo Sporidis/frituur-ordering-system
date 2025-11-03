@@ -24,9 +24,13 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "@types/stripe": "^8.0.416",
+    "@types/uuid": "^10.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "stripe": "^19.1.0"
+    "stripe": "^19.1.0",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -59,15 +63,33 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
+      "^.+\\.(t|j)s$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.json",
+          "useESM": true
+        }
+      ]
     },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
+    "extensionsToTreatAsEsm": [
+      ".ts"
     ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "transformIgnorePatterns": [
+      "/node_modules/(?!uuid/)"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.(t|j)s"
+    ],
+    "coverageDirectory": "./coverage",
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^@shared/(.*)$": "<rootDir>/src/shared/$1",
+      "^@modules/(.*)$": "<rootDir>/src/modules/$1",
+      "^@config/(.*)$": "<rootDir>/src/config/$1"
+    },
+    "setupFilesAfterEnv": ["<rootDir>/test/setup.ts"]
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frituur_ordering_system/features/websocket/presentation/websocket_view_model.dart';
+import 'package:frituur_ordering_system/features/websocket/data/websocket_repository_impl.dart';
 import 'package:provider/provider.dart';
 import 'package:frituur_ordering_system/l10n/app_localizations.dart';
 
@@ -13,51 +15,28 @@ class PocWebSocketPage extends StatefulWidget {
 }
 
 class _PocWebSocketPageState extends State<PocWebSocketPage> {
-  OrderStatusUpdate? _latestStatusUpdate;
+  late WebSocketViewModel _webSocketViewModel;
 
   @override
   void initState() {
     super.initState();
 
-    // Listen to order status updates
-    context.read<WebSocketService>().orderStatusStream.listen((update) {
-      if (mounted) {
-        setState(() {
-          _latestStatusUpdate = update;
-        });
-
-        _showStatusUpdateSnackbar(update);
-      }
-    });
-  }
-
-  void _showStatusUpdateSnackbar(OrderStatusUpdate update) {
-    final l10n = AppLocalizations.of(context)!;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          l10n.orderStatusUpdate(
-            update.orderId,
-            update.status.getLocalizedDisplayName(l10n),
-          ),
-        ),
-        backgroundColor: _getStatusColor(update.status),
-        duration: AppConstants.snackbarDuration,
-      ),
+    // Create the ViewModel with the repository
+    final websocketService = Provider.of<WebSocketService>(
+      context,
+      listen: false,
     );
+    final repository = SocketIoWebSocketRepository(websocketService);
+    _webSocketViewModel = WebSocketViewModel(repository);
+
+    // Initialize the ViewModel
+    _webSocketViewModel.initialize();
   }
 
-  Color _getStatusColor(OrderStatus status) {
-    switch (status) {
-      case OrderStatus.pending:
-        return Colors.orange;
-      case OrderStatus.inProgress:
-        return Colors.blue;
-      case OrderStatus.ready:
-        return Colors.green;
-      case OrderStatus.completed:
-        return Colors.grey;
-    }
+  @override
+  void dispose() {
+    _webSocketViewModel.dispose();
+    super.dispose();
   }
 
   void _showSuccessSnackbar(String message) {
@@ -84,86 +63,104 @@ class _PocWebSocketPageState extends State<PocWebSocketPage> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final languageProvider = Provider.of<LanguageProvider>(context);
-    final websocketService = Provider.of<WebSocketService>(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${l10n.appTitle} - WebSocket PoC'),
-        backgroundColor: Colors.orange,
-        foregroundColor: Colors.white,
-        actions: [
-          // Language toggle
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.language),
-            onSelected: (String languageCode) {
-              if (languageCode == 'en') {
-                languageProvider.setLocale(const Locale('en', ''));
-              } else {
-                languageProvider.setLocale(const Locale('nl', ''));
-              }
-            },
-            itemBuilder: (BuildContext context) => [
-              PopupMenuItem<String>(
-                value: 'en',
-                child: Row(
-                  children: [
-                    const Icon(Icons.flag, color: Colors.blue),
-                    const SizedBox(width: 8),
-                    Text(l10n.english),
-                  ],
-                ),
-              ),
-              PopupMenuItem<String>(
-                value: 'nl',
-                child: Row(
-                  children: [
-                    const Icon(Icons.flag, color: Colors.red),
-                    const SizedBox(width: 8),
-                    Text(l10n.dutch),
-                  ],
-                ),
+    return ListenableBuilder(
+      listenable: _webSocketViewModel,
+      builder: (context, child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('${l10n.appTitle} - ${l10n.poc2Websocket}'),
+            backgroundColor: Colors.orange,
+            foregroundColor: Colors.white,
+            actions: [
+              // Language toggle
+              PopupMenuButton<String>(
+                icon: const Icon(Icons.language),
+                onSelected: (String languageCode) {
+                  if (languageCode == 'en') {
+                    languageProvider.setLocale(const Locale('en', ''));
+                  } else {
+                    languageProvider.setLocale(const Locale('nl', ''));
+                  }
+                },
+                itemBuilder: (BuildContext context) => [
+                  PopupMenuItem<String>(
+                    value: 'en',
+                    child: Row(
+                      children: [
+                        const Icon(Icons.flag, color: Colors.blue),
+                        const SizedBox(width: 8),
+                        Text(l10n.english),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem<String>(
+                    value: 'nl',
+                    child: Row(
+                      children: [
+                        const Icon(Icons.flag, color: Colors.red),
+                        const SizedBox(width: 8),
+                        Text(l10n.dutch),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppConstants.defaultPadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Connection Status
-            ConnectionStatusCard(websocketService: websocketService),
-            const SizedBox(height: AppConstants.cardSpacing),
+          body: Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: Responsive.maxContentWidth),
+              child: Padding(
+                padding: const EdgeInsets.all(AppConstants.defaultPadding),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Connection Status
+                      ConnectionStatusCard(
+                        webSocketViewModel: _webSocketViewModel,
+                      ),
+                      const SizedBox(height: AppConstants.cardSpacing),
 
-            // WebSocket Controls
-            WebSocketControlsCard(websocketService: websocketService),
-            const SizedBox(height: AppConstants.cardSpacing),
+                      // WebSocket Controls
+                      WebSocketControlsCard(
+                        webSocketViewModel: _webSocketViewModel,
+                      ),
+                      const SizedBox(height: AppConstants.cardSpacing),
 
-            // Order Management
-            OrderManagementCard(
-              websocketService: websocketService,
-              onCreateOrder: () => _createOrder(websocketService),
-              onCreateSampleOrders: () => _createSampleOrders(websocketService),
+                      // Order Management
+                      OrderManagementCard(
+                        webSocketViewModel: _webSocketViewModel,
+                        onCreateOrder: () => _createOrder(),
+                        onCreateSampleOrders: () => _createSampleOrders(),
+                      ),
+                      const SizedBox(height: AppConstants.cardSpacing),
+
+                      // Real-time Status Updates
+                      StatusUpdatesCard(
+                        latestStatusUpdate:
+                            _webSocketViewModel.lastStatusUpdate,
+                      ),
+                      const SizedBox(height: AppConstants.cardSpacing),
+
+                      // Kitchen Simulation
+                      KitchenSimulationCard(
+                        onSimulateKitchen: _simulateKitchenWorkflow,
+                      ),
+                      const SizedBox(height: AppConstants.defaultPadding),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            const SizedBox(height: AppConstants.cardSpacing),
-
-            // Real-time Status Updates
-            StatusUpdatesCard(latestStatusUpdate: _latestStatusUpdate),
-            const SizedBox(height: AppConstants.cardSpacing),
-
-            // Kitchen Simulation
-            KitchenSimulationCard(onSimulateKitchen: _simulateKitchenWorkflow),
-            const SizedBox(
-              height: AppConstants.defaultPadding,
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
-  Future<void> _createOrder(WebSocketService websocketService) async {
+  Future<void> _createOrder() async {
     final l10n = AppLocalizations.of(context)!;
     try {
       final order = await ApiService.createOrder(
@@ -173,7 +170,7 @@ class _PocWebSocketPageState extends State<PocWebSocketPage> {
 
       if (order['success'] == true) {
         final newOrder = Order.fromJson(order['order']);
-        websocketService.addOrder(newOrder);
+        _webSocketViewModel.addOrder(newOrder);
 
         if (mounted) {
           _showSuccessSnackbar(l10n.orderCreated(newOrder.id));
@@ -186,13 +183,13 @@ class _PocWebSocketPageState extends State<PocWebSocketPage> {
     }
   }
 
-  Future<void> _createSampleOrders(WebSocketService websocketService) async {
+  Future<void> _createSampleOrders() async {
     final l10n = AppLocalizations.of(context)!;
     try {
       final orders = await ApiService.createSampleOrders();
 
       for (final order in orders) {
-        websocketService.addOrder(order);
+        _webSocketViewModel.addOrder(order);
       }
 
       if (mounted) {

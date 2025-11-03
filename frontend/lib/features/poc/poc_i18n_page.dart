@@ -70,7 +70,9 @@ class PocI18nPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Current Language: ${languageProvider.currentLanguageName}',
+                      l10n.currentLanguage(
+                        languageProvider.currentLanguageName,
+                      ),
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],

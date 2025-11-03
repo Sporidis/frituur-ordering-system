@@ -1,0 +1,23 @@
+{
+  "greeting": "Hallo",
+  "farewell": "Tot ziens",
+  "order_created": "Bestelling {id} succesvol aangemaakt",
+  "order_status_updated": "Status van bestelling {id} aangepast naar {status}",
+  "orders_overview_title": "Overzicht bestellingen",
+  "kitchen_simulation_started": "Keukensimulatie gestart",
+  "catalog_categories_title": "Categorieën",
+  "catalog_items_title": "Menu-items",
+  "pricing_quote_title": "Prijsopgave",
+  "pricing_subtotal": "Subtotaal",
+  "pricing_tax": "Btw",
+  "pricing_total": "Totaal",
+  "catalog.category.frieten": "Frieten",
+  "catalog.category.snacks": "Snacks",
+  "catalog.category.drinks": "Drinks",
+  "catalog.item.small_fries": "Klein Friet",
+  "catalog.item.large_fries": "Groot Friet",
+  "catalog.item.bitterballen_6": "Bitterballen (6)",
+  "catalog.item.frikandel": "Frikandel",
+  "catalog.item.cola": "Cola"
+}
+

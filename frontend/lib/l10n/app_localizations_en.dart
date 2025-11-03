@@ -338,4 +338,66 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get comingSoonModularPoc => 'Coming Soon: Modular Monolith PoC';
+
+  @override
+  String get pocTesting => 'PoC Testing';
+
+  @override
+  String get ping => 'Ping';
+
+  @override
+  String get stats => 'Stats';
+
+  @override
+  String get stabilityTest => 'Stability Test';
+
+  @override
+  String get testingEllipsis => 'Testing...';
+
+  @override
+  String get lastPong => 'Last Pong';
+
+  @override
+  String get connectionStatsTitle => 'Connection Stats';
+
+  @override
+  String get pingSentToServer => '🏓 Ping sent to server';
+
+  @override
+  String get requestingConnectionStatistics => '📊 Requesting connection statistics...';
+
+  @override
+  String get startingStabilityTest => '🧪 Starting 30-second stability test...';
+
+  @override
+  String get stabilityTestCompleted => '✅ Stability test completed';
+
+  @override
+  String get connectionLostDuringStabilityTest => '❌ Connection lost during stability test';
+
+  @override
+  String currentLanguage(String language) {
+    return 'Current Language: $language';
+  }
+
+  @override
+  String get statsActive => 'Active:';
+
+  @override
+  String get statsTotal => 'Total:';
+
+  @override
+  String get statsMax => 'Max:';
+
+  @override
+  String get refund => 'Refund';
+
+  @override
+  String get optionalRefundAmountHint => 'Optional: specify refund amount (defaults to full)';
+
+  @override
+  String get refundSuccessful => 'Refund successful';
+
+  @override
+  String get refundFailed => 'Refund failed';
 }

@@ -7,12 +7,14 @@ class PaymentIntentDisplayWidget extends StatelessWidget {
   final payment.PaymentIntent paymentIntent;
   final bool isProcessing;
   final VoidCallback onProcessPayment;
+  final VoidCallback? onRefresh;
 
   const PaymentIntentDisplayWidget({
     super.key,
     required this.paymentIntent,
     required this.isProcessing,
     required this.onProcessPayment,
+    this.onRefresh,
   });
 
   @override
@@ -54,20 +56,36 @@ class PaymentIntentDisplayWidget extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
+            // Process Payment Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: isProcessing ? null : onProcessPayment,
-                icon: const Icon(Icons.credit_card),
-                label: Text(
-                  isProcessing ? l10n.processing : l10n.processPayment,
-                ),
+                icon: const Icon(Icons.payment),
+                label: Text(isProcessing ? l10n.processing : 'Pay with Stripe'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   foregroundColor: Colors.white,
                 ),
               ),
             ),
+
+            // Refresh Button
+            if (paymentIntent.status != 'succeeded' && onRefresh != null) ...[
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: isProcessing ? null : onRefresh,
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('Refresh Status'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),

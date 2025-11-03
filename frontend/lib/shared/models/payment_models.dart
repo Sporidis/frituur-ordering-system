@@ -1,7 +1,7 @@
 class PaymentIntent {
   final String id;
   final String clientSecret;
-  final int amount; // Amount in cents
+  final double amount; // Amount in major units (e.g., EUR)
   final String currency;
   final String status;
   final Map<String, dynamic>? metadata;
@@ -19,7 +19,7 @@ class PaymentIntent {
     return PaymentIntent(
       id: json['id'] as String,
       clientSecret: json['clientSecret'] as String,
-      amount: json['amount'] as int,
+      amount: (json['amount'] as num).toDouble(),
       currency: json['currency'] as String,
       status: json['status'] as String,
       metadata: json['metadata'] as Map<String, dynamic>?,
@@ -37,8 +37,8 @@ class PaymentIntent {
     };
   }
 
-  // Helper to get amount in euros
-  double get amountInEuros => amount / 100.0;
+  // Already in major units
+  double get amountInEuros => amount;
 
   @override
   bool operator ==(Object other) {
@@ -103,13 +103,13 @@ class PaymentResult {
 
 class Refund {
   final String id;
-  final int amount; // Amount in cents
+  final double? amount; // Amount in major units (nullable for full refunds)
   final String status;
   final String paymentIntentId;
 
   const Refund({
     required this.id,
-    required this.amount,
+    this.amount,
     required this.status,
     required this.paymentIntentId,
   });
@@ -117,17 +117,20 @@ class Refund {
   factory Refund.fromJson(Map<String, dynamic> json) {
     return Refund(
       id: json['id'] as String,
-      amount: json['amount'] as int,
+      amount: json['amount'] != null
+          ? (json['amount'] as num).toDouble()
+          : null,
       status: json['status'] as String,
       paymentIntentId: json['paymentIntentId'] as String,
     );
   }
 
-  // Helper to get amount in euros
-  double get amountInEuros => amount / 100.0;
+  // Already in major units
+  double? get amountInEuros => amount;
 
   @override
   String toString() {
-    return 'Refund(id: $id, amount: $amountInEuros€, status: $status)';
+    final amountStr = amountInEuros != null ? '$amountInEuros€' : 'full refund';
+    return 'Refund(id: $id, amount: $amountStr, status: $status)';
   }
 }

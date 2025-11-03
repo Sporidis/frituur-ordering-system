@@ -4,8 +4,8 @@ import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:flutter/foundation.dart';
 
 import '../models/order_models.dart';
+import '../models/ws_models.dart';
 
-// Get the url from host
 String getUrlFromHost() {
   if (kIsWeb) return 'localhost';
   if (Platform.isAndroid) return '10.0.2.2';
@@ -21,12 +21,21 @@ class WebSocketService extends ChangeNotifier {
   final StreamController<OrderStatusUpdate> _orderStatusController =
       StreamController<OrderStatusUpdate>.broadcast();
 
+  // New streams for PoC testing features (typed DTOs)
+  final StreamController<ConnectionStats> _connectionStatsController =
+      StreamController<ConnectionStats>.broadcast();
+  final StreamController<ServerPong> _pongController =
+      StreamController<ServerPong>.broadcast();
+
   // Getters
   bool get isConnected => _isConnected;
   String? get currentOrderId => _currentOrderId;
   List<Order> get orders => List.unmodifiable(_orders);
   Stream<OrderStatusUpdate> get orderStatusStream =>
       _orderStatusController.stream;
+  Stream<ConnectionStats> get connectionStatsStream =>
+      _connectionStatsController.stream;
+  Stream<ServerPong> get pongStream => _pongController.stream;
 
   // Connection management
   Future<void> connect() async {
@@ -35,6 +44,10 @@ class WebSocketService extends ChangeNotifier {
       _socket = io.io('ws://$host:3000', <String, dynamic>{
         'transports': ['websocket'],
         'autoConnect': false,
+        'reconnection': true,
+        'reconnectionAttempts': 5,
+        'reconnectionDelay': 1000,
+        'timeout': 20000,
       });
 
       _setupEventListeners();
@@ -61,6 +74,11 @@ class WebSocketService extends ChangeNotifier {
       _isConnected = true;
       notifyListeners();
       debugPrint('✅ WebSocket: Connected successfully');
+
+      // Auto rejoin previous room after reconnect
+      if (_currentOrderId != null) {
+        joinOrderRoom(_currentOrderId!);
+      }
     });
 
     _socket!.onDisconnect((_) {
@@ -95,6 +113,33 @@ class WebSocketService extends ChangeNotifier {
         notifyListeners();
       } catch (e) {
         debugPrint('❌ Error parsing new order: $e');
+      }
+    });
+
+    // Event listeners for PoC testing
+    _socket!.on('connection_confirmed', (data) {
+      debugPrint('🔗 WebSocket: Connection confirmed: $data');
+    });
+
+    _socket!.on('server_pong', (data) {
+      debugPrint('🏓 WebSocket: Pong received: $data');
+      if (data is Map<String, dynamic>) {
+        try {
+          _pongController.add(ServerPong.fromJson(data));
+        } catch (e) {
+          debugPrint('❌ Error parsing server pong: $e');
+        }
+      }
+    });
+
+    _socket!.on('connection_stats', (data) {
+      debugPrint('📊 WebSocket: Connection stats received: $data');
+      if (data is Map<String, dynamic>) {
+        try {
+          _connectionStatsController.add(ConnectionStats.fromJson(data));
+        } catch (e) {
+          debugPrint('❌ Error parsing connection stats: $e');
+        }
       }
     });
   }
@@ -137,10 +182,27 @@ class WebSocketService extends ChangeNotifier {
     notifyListeners();
   }
 
+  // New methods for PoC testing
+  void pingServer() {
+    if (_socket != null && _isConnected) {
+      _socket!.emit('client_ping');
+      debugPrint('🏓 WebSocket: Ping sent to server');
+    }
+  }
+
+  void requestConnectionStats() {
+    if (_socket != null && _isConnected) {
+      _socket!.emit('get_connection_stats');
+      debugPrint('📊 WebSocket: Requesting connection statistics');
+    }
+  }
+
   @override
   void dispose() {
     disconnect();
     _orderStatusController.close();
+    _connectionStatsController.close();
+    _pongController.close();
     super.dispose();
   }
 }

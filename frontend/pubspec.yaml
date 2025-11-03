@@ -52,6 +52,9 @@ dependencies:
   # Stripe payment integration
   flutter_stripe: ^10.1.1
   
+  # In-app WebView (desktop Elements flow)
+  flutter_inappwebview: ^6.0.0
+  
   # Environment variables
   flutter_dotenv: ^5.1.0
 

@@ -1,0 +1,23 @@
+{
+  "greeting": "Hello",
+  "farewell": "Goodbye",
+  "order_created": "Order {id} created successfully",
+  "order_status_updated": "Order {id} status updated to {status}",
+  "orders_overview_title": "Orders overview",
+  "kitchen_simulation_started": "Kitchen simulation started",
+  "catalog_categories_title": "Categories",
+  "catalog_items_title": "Menu items",
+  "pricing_quote_title": "Price quote",
+  "pricing_subtotal": "Subtotal",
+  "pricing_tax": "Tax",
+  "pricing_total": "Total",
+  "catalog.category.frieten": "Fries",
+  "catalog.category.snacks": "Snacks",
+  "catalog.category.drinks": "Drinks",
+  "catalog.item.small_fries": "Small Fries",
+  "catalog.item.large_fries": "Large Fries",
+  "catalog.item.bitterballen_6": "Bitterballen (6)",
+  "catalog.item.frikandel": "Frikandel",
+  "catalog.item.cola": "Cola"
+}
+

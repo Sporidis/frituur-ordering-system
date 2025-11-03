@@ -3,10 +3,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 import '../models/payment_models.dart' as payment;
-import '../constants/app_constants.dart';
+import '../../core/constants/app_constants.dart';
 import 'websocket_service.dart'; // For getUrlFromHost
 
 class PaymentService {
@@ -25,48 +24,29 @@ class PaymentService {
       Stripe.publishableKey = publishableKey;
 
       // Initialize Stripe with platform-specific settings
-      try {
-        if (kIsWeb) {
-          debugPrint('🌐 Initializing Stripe for web platform');
-        } else if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-          debugPrint('🖥️ Initializing Stripe for desktop platform');
-        } else if (Platform.isAndroid || Platform.isIOS) {
-          debugPrint('📱 Initializing Stripe for mobile platform');
+      if (kIsWeb) {
+        debugPrint(
+          '🌐 Stripe: web platform detected (no native init required)',
+        );
+      } else if (Platform.isAndroid || Platform.isIOS) {
+        try {
+          debugPrint('📱 Stripe: initializing for mobile platform');
+          await Stripe.instance.applySettings();
+        } catch (platformError) {
+          debugPrint('⚠️ Stripe mobile init failed: $platformError');
         }
-
-        // Initialize Stripe
-        await Stripe.instance.applySettings();
-      } catch (platformError) {
-        // This is a known issue with flutter_stripe on web/desktop - ignore silently
-        if (platformError.toString().contains('Platform._operatingSystem') ||
-            platformError.toString().contains('Unsupported operation')) {
-          // Silently ignore this expected error - payments work fine
-        } else {
-          debugPrint(
-            '⚠️ Platform-specific Stripe initialization failed: $platformError',
-          );
-          // For web platform, this error is expected and can be ignored
-          if (kIsWeb) {
-            debugPrint(
-              'ℹ️ Web platform Stripe initialization completed (error expected)',
-            );
-          } else {
-            // Try basic initialization without platform detection for other platforms
-            try {
-              await Stripe.instance.applySettings();
-            } catch (fallbackError) {
-              debugPrint(
-                '❌ Fallback Stripe initialization also failed: $fallbackError',
-              );
-            }
-          }
-        }
+      } else if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+        // flutter_stripe has limited/nonexistent support on some desktop targets.
+        // Skip native initialization and rely on server-side confirmation.
+        debugPrint(
+          '🖥️ Stripe: desktop platform detected; skipping native init',
+        );
       }
 
-      debugPrint('✅ Stripe initialized successfully');
+      debugPrint('✅ Stripe initialized');
     } catch (e) {
-      debugPrint('❌ Error initializing Stripe: $e');
-      return;
+      // Do not treat as fatal on web; just log
+      debugPrint('ℹ️ Stripe init notice: $e');
     }
   }
 
@@ -107,10 +87,48 @@ class PaymentService {
   static Future<payment.PaymentResult> processPayment({
     required String clientSecret,
     required String customerName,
+    required String paymentIntentId,
   }) async {
     try {
-      debugPrint('✅ Demo payment processed successfully');
-      return payment.PaymentResult.success('demo_payment_id', 'succeeded');
+      // Use server-side confirmation on web and desktop; native confirm on mobile only
+      if (kIsWeb ||
+          Platform.isWindows ||
+          Platform.isLinux ||
+          Platform.isMacOS) {
+        // On web, use backend to confirm with a test payment method
+        final resp = await http.post(
+          Uri.parse('$baseUrl/payments/process'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'paymentId': paymentIntentId,
+            'paymentMethodId': 'pm_card_visa',
+          }),
+        );
+        if (resp.statusCode == 200) {
+          final data = jsonDecode(resp.body);
+          if (data['success'] == true) {
+            return payment.PaymentResult.success(
+              data['payment']['id'] ?? paymentIntentId,
+              data['payment']['status'] ?? 'succeeded',
+            );
+          }
+          return payment.PaymentResult.error(
+            data['error']?.toString() ?? 'Payment failed',
+          );
+        }
+        return payment.PaymentResult.error(
+          'HTTP ${resp.statusCode}: ${resp.body}',
+        );
+      }
+
+      await Stripe.instance.confirmPayment(
+        paymentIntentClientSecret: clientSecret,
+        data: const PaymentMethodParams.card(
+          paymentMethodData: PaymentMethodData(),
+        ),
+      );
+
+      return payment.PaymentResult.success('payment_confirmed', 'succeeded');
     } catch (e) {
       debugPrint('❌ Error processing payment: $e');
       return payment.PaymentResult.error(e.toString());
@@ -158,7 +176,7 @@ class PaymentService {
         }),
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         final data = jsonDecode(response.body);
         if (data['success'] == true) {
           return payment.Refund.fromJson(data['refund']);

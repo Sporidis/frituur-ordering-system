@@ -1,12 +1,13 @@
 import { Controller, Post } from '@nestjs/common';
-import { CreateSampleOrdersEndpoint } from '../endpoints/create-sample-orders.endpoint';
+import { CreateSampleOrdersEndpoint } from '@modules/ordering/presentation/http/endpoints/create-sample-orders.endpoint';
+import { CurrentLocale } from '@modules/i18n/presentation/http/decorators/current-locale.decorator';
 
 @Controller('orders')
 export class CreateSampleOrdersHttpController {
   constructor(private readonly endpoint: CreateSampleOrdersEndpoint) {}
 
-  @Post('seed')
-  handle() {
-    return this.endpoint.handle();
+  @Post('demo/create-sample')
+  handle(@CurrentLocale() locale: string) {
+    return this.endpoint.handle({ locale });
   }
 }

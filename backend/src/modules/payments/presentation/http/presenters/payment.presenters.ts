@@ -7,7 +7,8 @@ export const PaymentPresenters = {
     clientSecret: string;
     amount: number;
     currency: string;
-  }): HttpSuccess<{ paymentIntent: any }> => ({
+    message?: string;
+  }): HttpSuccess<{ paymentIntent: any; message?: string }> => ({
     success: true,
     paymentIntent: {
       id: params.paymentIntentId,
@@ -17,6 +18,7 @@ export const PaymentPresenters = {
       status: 'requires_payment_method',
       stripePaymentIntentId: params.paymentIntentId,
     },
+    ...(params.message ? { message: params.message } : {}),
   }),
 
   paymentIntent: (params: {
@@ -56,6 +58,7 @@ export const PaymentPresenters = {
     status: string;
     amount?: number;
     paymentIntentId: string;
+    message?: string;
   }): HttpSuccess<{ refund: any; message: string }> => ({
     success: true,
     refund: {
@@ -64,7 +67,7 @@ export const PaymentPresenters = {
       amount: params.amount,
       paymentIntentId: params.paymentIntentId,
     },
-    message: 'Refund created successfully',
+    message: params.message || 'Refund created successfully',
   }),
 
   error: (message: string): HttpError => ({ success: false, error: message }),

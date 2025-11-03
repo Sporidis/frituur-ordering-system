@@ -1,17 +1,27 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Order, OrderItem, OrderStatus } from './domain/order.types';
 import { OrderEntity } from './domain/order.entity';
+import { OrderRepository } from './domain/repositories/order.repository';
 
 @Injectable()
-export class OrderService {
+export class OrderService implements OrderRepository {
   private logger: Logger = new Logger('OrderService');
   private orders: Map<string, Order> = new Map();
   private orderCounter = 1;
 
-  createOrder(customerName: string, items: Omit<OrderItem, 'id'>[]): Order {
+  createOrder(
+    customerName: string,
+    items: Omit<OrderItem, 'id'>[],
+    totalAmount?: number,
+  ): Order {
     const orderId = `#${this.orderCounter.toString().padStart(3, '0')}`;
     this.orderCounter++;
-    const entity = new OrderEntity({ id: orderId, customerName, items });
+    const entity = new OrderEntity({
+      id: orderId,
+      customerName,
+      items,
+      totalAmount,
+    });
     this.orders.set(orderId, entity);
     this.logger.log(`Created new order: ${orderId}`);
     return entity;

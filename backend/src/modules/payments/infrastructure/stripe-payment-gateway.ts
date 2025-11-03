@@ -2,13 +2,14 @@ import { Injectable, Logger } from '@nestjs/common';
 import Stripe from 'stripe';
 import { stripeConfig } from '@config/stripe.config';
 import { Money } from '@shared/domain/value-objects/money';
+import { PaymentGatewayPort } from '../domain/ports/payment-gateway.port';
 
 /**
  * Stripe payment gateway implementation
  * Handles communication with Stripe API
  */
 @Injectable()
-export class StripePaymentGateway {
+export class StripePaymentGateway implements PaymentGatewayPort {
   private readonly logger = new Logger(StripePaymentGateway.name);
   private readonly stripe: Stripe;
 
@@ -59,7 +60,7 @@ export class StripePaymentGateway {
   async confirmPaymentIntent(
     paymentIntentId: string,
     paymentMethodId: string,
-  ): Promise<{ status: string; chargeId?: string }> {
+  ): Promise<{ success: boolean; status: string }> {
     try {
       const paymentIntent = await this.stripe.paymentIntents.confirm(
         paymentIntentId,
@@ -71,8 +72,8 @@ export class StripePaymentGateway {
       this.logger.log(`Confirmed Stripe payment intent: ${paymentIntentId}`);
 
       return {
+        success: paymentIntent.status === 'succeeded',
         status: paymentIntent.status,
-        chargeId: paymentIntent.latest_charge as string,
       };
     } catch (error) {
       this.logger.error('Error confirming Stripe payment intent:', error);
@@ -83,10 +84,11 @@ export class StripePaymentGateway {
   /**
    * Cancel a payment intent
    */
-  async cancelPaymentIntent(paymentIntentId: string): Promise<void> {
+  async cancelPaymentIntent(paymentIntentId: string): Promise<boolean> {
     try {
       await this.stripe.paymentIntents.cancel(paymentIntentId);
       this.logger.log(`Cancelled Stripe payment intent: ${paymentIntentId}`);
+      return true;
     } catch (error) {
       this.logger.error('Error cancelling Stripe payment intent:', error);
       throw new Error(`Failed to cancel payment: ${error.message}`);
@@ -98,12 +100,14 @@ export class StripePaymentGateway {
    */
   async createRefund(
     paymentIntentId: string,
-    amount?: Money,
-  ): Promise<{ refundId: string; status: string }> {
+    amount?: number,
+    reason?: string,
+  ): Promise<{ refundId: string; status: string; amount?: number }> {
     try {
       const refund = await this.stripe.refunds.create({
         payment_intent: paymentIntentId,
-        amount: amount ? amount.amountInCents : undefined,
+        amount: amount,
+        reason: reason as any,
       });
 
       this.logger.log(`Created Stripe refund: ${refund.id}`);
@@ -111,6 +115,7 @@ export class StripePaymentGateway {
       return {
         refundId: refund.id,
         status: refund.status || 'unknown',
+        amount: refund.amount,
       };
     } catch (error) {
       this.logger.error('Error creating Stripe refund:', error);
@@ -121,11 +126,23 @@ export class StripePaymentGateway {
   /**
    * Get payment intent details
    */
-  async getPaymentIntent(paymentIntentId: string): Promise<any> {
+  async getPaymentIntent(paymentIntentId: string): Promise<{
+    id: string;
+    status: string;
+    amount: number;
+    currency: string;
+    metadata?: Record<string, any>;
+  }> {
     try {
       const paymentIntent =
         await this.stripe.paymentIntents.retrieve(paymentIntentId);
-      return paymentIntent;
+      return {
+        id: paymentIntent.id,
+        status: paymentIntent.status,
+        amount: paymentIntent.amount,
+        currency: paymentIntent.currency,
+        metadata: paymentIntent.metadata as Record<string, any>,
+      };
     } catch (error) {
       this.logger.error('Error retrieving Stripe payment intent:', error);
       throw new Error(`Failed to retrieve payment intent: ${error.message}`);

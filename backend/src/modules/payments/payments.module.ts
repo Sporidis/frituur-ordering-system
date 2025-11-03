@@ -1,24 +1,23 @@
 import { Module } from '@nestjs/common';
 import { PAYMENT_NEST_CONTROLLERS } from './presentation/http/controllers';
-import { PaymentApplicationService } from './application/payment-application.service';
 import { InMemoryPaymentRepository } from './infrastructure/payment-repository.impl';
 import { StripePaymentGateway } from './infrastructure/stripe-payment-gateway';
 import { PAYMENT_HTTP_ENDPOINTS } from './presentation/http/endpoints';
-import { CreatePaymentIntentController } from './presentation/controllers/create-payment-intent.controller';
-import { CreateRefundController } from './presentation/controllers/create-refund.controller';
+import { PAYMENT_HTTP_CONTROLLERS } from './presentation/controllers';
 import { PAYMENT_USE_CASES } from './application/use-cases';
+import { PAYMENT_REPOSITORY } from './domain/payment-repository.interface';
+import { PAYMENT_GATEWAY } from './domain/ports/payment-gateway.port';
 
 @Module({
   controllers: [...PAYMENT_NEST_CONTROLLERS],
   providers: [
-    PaymentApplicationService,
     StripePaymentGateway,
-    { provide: 'IPaymentRepository', useClass: InMemoryPaymentRepository },
+    { provide: PAYMENT_REPOSITORY, useClass: InMemoryPaymentRepository },
+    { provide: PAYMENT_GATEWAY, useExisting: StripePaymentGateway },
     ...PAYMENT_USE_CASES,
-    CreatePaymentIntentController,
-    CreateRefundController,
+    ...PAYMENT_HTTP_CONTROLLERS,
     ...PAYMENT_HTTP_ENDPOINTS,
   ],
-  exports: [PaymentApplicationService, 'IPaymentRepository'],
+  exports: [PAYMENT_REPOSITORY, PAYMENT_GATEWAY],
 })
 export class PaymentsModule {}

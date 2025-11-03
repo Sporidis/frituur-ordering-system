@@ -1,12 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { PaymentApplicationService } from '../payment-application.service';
+import { Inject, Injectable } from '@nestjs/common';
 import { UseCase } from '../../../../shared/application/usecase.interface';
+import {
+  PAYMENT_REPOSITORY,
+  type IPaymentRepository,
+} from '@modules/payments/domain/payment-repository.interface';
 
 @Injectable()
 export class GetPaymentUseCase implements UseCase<string, any> {
-  constructor(private readonly app: PaymentApplicationService) {}
+  constructor(
+    @Inject(PAYMENT_REPOSITORY)
+    private readonly paymentRepository: IPaymentRepository,
+  ) {}
 
-  execute(id: string) {
-    return this.app.getPayment(id);
+  async execute(id: string) {
+    return await this.paymentRepository.findById(id);
   }
 }

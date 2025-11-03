@@ -14,6 +14,7 @@ export class OrderEntity implements Order {
     customerName: string;
     items: Omit<OrderItem, 'id'>[];
     createdAt?: Date;
+    totalAmount?: number;
   }) {
     this.id = params.id;
     this.customerName = params.customerName;
@@ -22,7 +23,8 @@ export class OrderEntity implements Order {
       id: `item_${params.id}_${index}`,
       ...item,
     }));
-    this.totalAmount = OrderEntity.calculateTotal(this.items);
+    this.totalAmount =
+      params.totalAmount ?? OrderEntity.calculateTotal(this.items);
     this.status = OrderStatus.PENDING;
     this.estimatedReadyTime = OrderEntity.estimateReadyTime(
       this.createdAt,

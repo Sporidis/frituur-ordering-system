@@ -1,14 +1,19 @@
-import { Injectable } from '@nestjs/common';
-import { OrderService } from '../../order.service';
+import { Inject, Injectable } from '@nestjs/common';
+import {
+  ORDER_REPOSITORY,
+  type OrderRepository,
+} from '@modules/ordering/domain/repositories/order.repository';
 import { UseCase } from '@shared/application/usecase.interface';
-import { CreateSampleOrdersRequest } from '../contracts/requests/create-sample-orders.request';
-import { CreateSampleOrdersResponse } from '../contracts/responses/create-sample-orders.response';
+import { CreateSampleOrdersRequest } from '@modules/ordering/application/contracts/requests/create-sample-orders.request';
+import { CreateSampleOrdersResponse } from '@modules/ordering/application/contracts/responses/create-sample-orders.response';
 
 @Injectable()
 export class CreateSampleOrdersUseCase
   implements UseCase<CreateSampleOrdersRequest, CreateSampleOrdersResponse>
 {
-  constructor(private readonly orders: OrderService) {}
+  constructor(
+    @Inject(ORDER_REPOSITORY) private readonly orders: OrderRepository,
+  ) {}
 
   execute(_: CreateSampleOrdersRequest): CreateSampleOrdersResponse {
     this.orders.createOrder('Alice', [

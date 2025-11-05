@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GetAllOrdersEndpoint } from '@modules/ordering/presentation/http/endpoints/get-all-orders.endpoint';
-import { GetAllOrdersController } from '@modules/ordering/presentation/controllers/get-all-orders.controller';
+import { GetAllOrdersEndpoint } from '@modules/order/presentation/http/endpoints/get-all-orders.endpoint';
+import { GetAllOrdersController } from '@modules/order/presentation/controllers/get-all-orders.controller';
 import { I18nService } from '@modules/i18n/application/i18n.service';
-import { OrderStatus } from '@modules/ordering/domain/order.types';
+import { OrderStatus } from '@modules/order/domain/order.types';
 
 describe('GetAllOrdersEndpoint', () => {
   let endpoint: GetAllOrdersEndpoint;

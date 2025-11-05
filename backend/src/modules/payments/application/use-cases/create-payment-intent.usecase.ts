@@ -1,5 +1,6 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { CreatePaymentIntentDto } from '../../presentation/dto/create-payment-intent.dto';
+import { Inject } from '@nestjs/common';
+import { UseCase } from '@shared/application/usecase.interface';
+import type { OutputPort } from '@shared/application/contracts/output-port.interface';
 import { Money } from '@shared/domain/value-objects/money';
 import { Payment } from '@modules/payments/domain/payment.entity';
 import { PaymentMethod } from '@modules/payments/domain/payment-method.enum';
@@ -12,43 +13,60 @@ import {
   type PaymentGatewayPort,
 } from '@modules/payments/domain/ports/payment-gateway.port';
 
-@Injectable()
-export class CreatePaymentIntentUseCase {
+export interface CreatePaymentIntentRequest {
+  amount: number;
+  currency: string;
+  customerId?: string;
+  orderId?: string;
+  paymentMethod?: string;
+  metadata?: Record<string, any>;
+}
+
+export interface CreatePaymentIntentResponse {
+  paymentId: string;
+  paymentIntentId: string;
+  clientSecret: string;
+}
+
+export class CreatePaymentIntentUseCase
+  implements UseCase<CreatePaymentIntentRequest>
+{
   constructor(
+    private readonly outputPort: OutputPort<CreatePaymentIntentResponse>,
     @Inject(PAYMENT_REPOSITORY)
     private readonly paymentRepository: IPaymentRepository,
     @Inject(PAYMENT_GATEWAY)
     private readonly paymentGateway: PaymentGatewayPort,
   ) {}
 
-  async execute(dto: CreatePaymentIntentDto) {
-    const amount = new Money(dto.amount, dto.currency);
-    const paymentMethod = dto.paymentMethod as PaymentMethod;
+  async execute(input: CreatePaymentIntentRequest): Promise<void> {
+    const amount = new Money(input.amount, input.currency);
+    const paymentMethod = (input.paymentMethod as PaymentMethod) || 'card';
     const payment = new Payment(
       amount,
-      dto.customerId,
-      dto.orderId,
+      input.customerId || 'anonymous',
+      input.orderId || 'unknown-order',
       paymentMethod,
     );
 
-    if (dto.metadata) {
-      payment.updateMetadata(dto.metadata);
+    if (input.metadata) {
+      payment.updateMetadata(input.metadata);
     }
 
     const stripe = await this.paymentGateway.createPaymentIntent(
       amount,
-      dto.customerId,
-      dto.orderId,
-      dto.metadata,
+      input.customerId || 'anonymous',
+      input.orderId || 'unknown-order',
+      input.metadata,
     );
 
     payment.markAsProcessing(stripe.paymentIntentId);
     await this.paymentRepository.save(payment);
 
-    return {
+    this.outputPort.present({
       paymentId: payment.id,
       paymentIntentId: stripe.paymentIntentId,
       clientSecret: stripe.clientSecret,
-    };
+    });
   }
 }

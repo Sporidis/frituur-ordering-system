@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GetStatsOverviewEndpoint } from '@modules/ordering/presentation/http/endpoints/get-stats-overview.endpoint';
-import { GetStatsOverviewController } from '@modules/ordering/presentation/controllers/get-stats-overview.controller';
+import { GetStatsOverviewEndpoint } from '@modules/order/presentation/http/endpoints/get-stats-overview.endpoint';
+import { GetStatsOverviewController } from '@modules/order/presentation/controllers/get-stats-overview.controller';
 import { I18nService } from '@modules/i18n/application/i18n.service';
 
 describe('GetStatsOverviewEndpoint', () => {

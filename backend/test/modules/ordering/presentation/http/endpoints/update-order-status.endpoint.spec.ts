@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UpdateOrderStatusEndpoint } from '@modules/ordering/presentation/http/endpoints/update-order-status.endpoint';
-import { UpdateOrderStatusController } from '@modules/ordering/presentation/controllers/update-order-status.controller';
+import { UpdateOrderStatusEndpoint } from '@modules/order/presentation/http/endpoints/update-order-status.endpoint';
+import { UpdateOrderStatusController } from '@modules/order/presentation/controllers/update-order-status.controller';
 import { I18nService } from '@modules/i18n/application/i18n.service';
-import { OrderStatus } from '@modules/ordering/domain/order.types';
+import { OrderStatus } from '@modules/order/domain/order.types';
 
 describe('UpdateOrderStatusEndpoint', () => {
   let endpoint: UpdateOrderStatusEndpoint;

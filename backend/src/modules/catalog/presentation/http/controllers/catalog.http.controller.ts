@@ -1,21 +1,18 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { CurrentLocale } from '@modules/i18n/presentation/http/decorators/current-locale.decorator';
-import {
-  GetCategoriesUseCase,
-  GetMenuItemsUseCase,
-} from '@modules/catalog/application/use-cases';
+import { GetCategoriesEndpoint } from '../endpoints/get-categories.endpoint';
+import { GetMenuItemsEndpoint } from '../endpoints/get-menu-items.endpoint';
 
 @Controller('catalog')
 export class CatalogHttpController {
   constructor(
-    private readonly getCategoriesUseCase: GetCategoriesUseCase,
-    private readonly getMenuItemsUseCase: GetMenuItemsUseCase,
+    private readonly getCategoriesEndpoint: GetCategoriesEndpoint,
+    private readonly getMenuItemsEndpoint: GetMenuItemsEndpoint,
   ) {}
 
   @Get('categories')
   categories(@CurrentLocale() locale: string) {
-    const result = this.getCategoriesUseCase.execute({ locale });
-    return { success: true, categories: result.categories };
+    return this.getCategoriesEndpoint.handle({ locale });
   }
 
   @Get('items')
@@ -23,7 +20,6 @@ export class CatalogHttpController {
     @CurrentLocale() locale: string,
     @Query('categoryId') categoryId?: string,
   ) {
-    const result = this.getMenuItemsUseCase.execute({ locale, categoryId });
-    return { success: true, items: result.items };
+    return this.getMenuItemsEndpoint.handle({ locale, categoryId });
   }
 }

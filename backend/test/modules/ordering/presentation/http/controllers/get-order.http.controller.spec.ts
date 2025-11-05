@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GetOrderHttpController } from '@modules/ordering/presentation/http/controllers/get-order.http.controller';
-import { GetOrderEndpoint } from '@modules/ordering/presentation/http/endpoints/get-order.endpoint';
+import { GetOrderHttpController } from '@modules/order/presentation/http/controllers/get-order.http.controller';
+import { GetOrderEndpoint } from '@modules/order/presentation/http/endpoints/get-order.endpoint';
 
 describe('GetOrderHttpController', () => {
   let controller: GetOrderHttpController;

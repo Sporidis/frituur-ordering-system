@@ -1,5 +1,5 @@
-import { OrderPresenters } from '@modules/ordering/presentation/http/presenters/order.presenters';
-import type { OrderView } from '@modules/ordering/presentation/http/types';
+import { OrderPresenters } from '@modules/order/presentation/http/presenters/order.presenters';
+import type { OrderView } from '@modules/order/presentation/http/types';
 
 describe('OrderPresenters', () => {
   const mockOrder: OrderView = {
@@ -7,6 +7,9 @@ describe('OrderPresenters', () => {
     customerName: 'John',
     totalAmount: 10.5,
     status: 'pending',
+    items: [],
+    estimatedReadyTime: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
   };
 
   it('should present created order with message', () => {

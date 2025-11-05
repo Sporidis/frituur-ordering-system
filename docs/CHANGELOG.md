@@ -8,30 +8,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Initial project setup and documentation
 - Research flow documentation with 10-step methodology
 - Technology stack selection and justification
 - Architecture design with modular monolith approach
 - Proof of concept implementation plans
+- `CategoryEntity` and `MenuItemEntity` with business logic for sorting and filtering
+- `InMemoryOrderRepository` implementing repository pattern for order persistence
+- `QuoteOrderEndpoint` and `QuoteOrderHttpController` for order price quotes
+- Application controllers for Catalog module (`GetCategoriesController`, `GetMenuItemsController`)
+- HTTP endpoints for Catalog module (`GetCategoriesEndpoint`, `GetMenuItemsEndpoint`)
+- Presenters for Catalog module responses (`CatalogPresenters`)
+- Pricing calculation methods in `OrderEntity` (`calculateTotalWithTax`, `estimateReadyTime`)
 
 ### Changed
-- N/A
+
+- Renamed `OrderingModule` to `OrderModule` for broader scope
+- Integrated pricing logic directly into `OrderEntity` (removed dependency on `PricingModule`)
+- Refactored Catalog module to use Complex Pattern (entities, controllers, endpoints, presenters)
+- Updated `CreateOrderUseCase` to use `OrderEntity.calculateTotalWithTax()` instead of `PricingPort`
+- Updated `CreateOrderEndpoint` and `UpdateOrderStatusEndpoint` to use `OrderRepository` instead of `OrderService`
+- Moved quote functionality from Pricing module to Order module
+- Updated all module imports and dependencies to reflect OrderModule renaming
+- Updated architecture documentation to reflect module restructuring
 
 ### Deprecated
+
 - N/A
 
 ### Removed
-- N/A
+
+- `PricingModule` (functionality integrated into `OrderModule`)
+- All pricing module files (services, controllers, endpoints, presenters)
+- Pricing module test files
 
 ### Fixed
-- N/A
+
+- Business logic distribution: moved sorting/filtering logic from services to domain entities
+- Test files updated to reflect new module structure and dependencies
+- Import paths corrected for Catalog module endpoints and presenters
+- Type compatibility issues in `CreateOrderUseCase` with `OrderEntity.calculateTotalWithTax()`
 
 ### Security
+
 - N/A
 
 ## [0.1.0] - 2024-11-24
 
 ### Added
+
 - Project initialization
 - Research documentation
 - Technology selection rationale

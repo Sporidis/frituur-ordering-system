@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UpdateOrderStatusUseCase } from '@modules/ordering/application/use-cases/update-order-status.usecase';
-import { ORDER_REPOSITORY } from '@modules/ordering/domain/repositories/order.repository';
-import { OrderStatus } from '@modules/ordering/domain/order.types';
+import { UpdateOrderStatusUseCase } from '@modules/order/application/use-cases/update-order-status.usecase';
+import { ORDER_REPOSITORY } from '@modules/order/domain/repositories/order.repository';
+import { OrderStatus } from '@modules/order/domain/order.types';
 
 describe('UpdateOrderStatusUseCase', () => {
   let useCase: UpdateOrderStatusUseCase;

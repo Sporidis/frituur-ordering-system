@@ -1,6 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
+import { UseCase } from '@shared/application/usecase.interface';
+import type { OutputPort } from '@shared/application/contracts/output-port.interface';
+import { NotFoundException } from '@shared/application/exceptions/base.exception';
 import { ProcessPaymentDto } from '../../presentation/dto/process-payment.dto';
-import { UseCase } from '../../../../shared/application/usecase.interface';
 import {
   PAYMENT_REPOSITORY,
   type IPaymentRepository,
@@ -10,27 +12,39 @@ import {
   type PaymentGatewayPort,
 } from '@modules/payments/domain/ports/payment-gateway.port';
 
-@Injectable()
-export class ProcessPaymentUseCase implements UseCase<ProcessPaymentDto, any> {
+export interface ProcessPaymentRequest {
+  paymentId: string;
+  paymentMethodId: string;
+}
+
+export interface ProcessPaymentResponse {
+  paymentId: string;
+  status: string;
+  amount: number;
+  currency: string;
+}
+
+export class ProcessPaymentUseCase implements UseCase<ProcessPaymentRequest> {
   constructor(
+    private readonly outputPort: OutputPort<ProcessPaymentResponse>,
     @Inject(PAYMENT_REPOSITORY)
     private readonly paymentRepository: IPaymentRepository,
     @Inject(PAYMENT_GATEWAY)
     private readonly paymentGateway: PaymentGatewayPort,
   ) {}
 
-  async execute(dto: ProcessPaymentDto) {
+  async execute(input: ProcessPaymentRequest): Promise<void> {
     const payments = await this.paymentRepository.findAll();
     const payment = payments.find(
-      (p) => p.stripePaymentIntentId === dto.paymentId,
+      (p) => p.stripePaymentIntentId === input.paymentId,
     );
     if (!payment) {
-      throw new Error('Payment not found');
+      throw new NotFoundException('Payment', input.paymentId);
     }
 
     const stripeResult = await this.paymentGateway.confirmPaymentIntent(
       payment.stripePaymentIntentId!,
-      dto.paymentMethodId,
+      input.paymentMethodId,
     );
 
     if (stripeResult.success && stripeResult.status === 'succeeded') {
@@ -44,11 +58,11 @@ export class ProcessPaymentUseCase implements UseCase<ProcessPaymentDto, any> {
     }
 
     await this.paymentRepository.save(payment);
-    return {
+    this.outputPort.present({
       paymentId: payment.id,
       status: payment.status,
       amount: payment.amount.amountInCents,
       currency: payment.amount.currency.toLowerCase(),
-    };
+    });
   }
 }

@@ -1,5 +1,6 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Logger } from '@nestjs/common';
 import { UseCase } from '@shared/application/usecase.interface';
+import type { OutputPort } from '@shared/application/contracts/output-port.interface';
 import {
   PAYMENT_REPOSITORY,
   type IPaymentRepository,
@@ -9,20 +10,28 @@ import {
   type PaymentGatewayPort,
 } from '@modules/payments/domain/ports/payment-gateway.port';
 
-@Injectable()
-export class HandleWebhookUseCase
-  implements UseCase<{ rawBody: Buffer; signature: string }, any>
-{
+export interface HandleWebhookRequest {
+  rawBody: Buffer;
+  signature: string;
+}
+
+export interface HandleWebhookResponse {
+  eventType: string;
+  processed: boolean;
+}
+
+export class HandleWebhookUseCase implements UseCase<HandleWebhookRequest> {
   private readonly logger = new Logger(HandleWebhookUseCase.name);
 
   constructor(
+    private readonly outputPort: OutputPort<HandleWebhookResponse>,
     @Inject(PAYMENT_REPOSITORY)
     private readonly paymentRepository: IPaymentRepository,
     @Inject(PAYMENT_GATEWAY)
     private readonly paymentGateway: PaymentGatewayPort,
   ) {}
 
-  async execute(input: { rawBody: Buffer; signature: string }) {
+  async execute(input: HandleWebhookRequest): Promise<void> {
     const event = await this.paymentGateway.constructWebhookEvent(
       input.rawBody,
       input.signature,
@@ -78,9 +87,9 @@ export class HandleWebhookUseCase
         this.logger.log(`Unhandled event type: ${event.type}`);
     }
 
-    return {
+    this.outputPort.present({
       eventType: event.type,
       processed: true,
-    };
+    });
   }
 }

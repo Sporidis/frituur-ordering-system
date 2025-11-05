@@ -1,36 +1,26 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateOrderUseCase } from '@modules/ordering/application/use-cases/create-order.usecase';
-import { OrderService } from '@modules/ordering/order.service';
-import {
-  PRICING_PORT,
-  type PricingPort,
-} from '@modules/pricing/domain/ports/pricing.port';
+import { CreateOrderUseCase } from '@modules/order/application/use-cases/create-order.usecase';
+import { ORDER_REPOSITORY } from '@modules/order/domain/repositories/order.repository';
+import type { OrderRepository } from '@modules/order/domain/repositories/order.repository';
 
 describe('CreateOrderUseCase', () => {
   let useCase: CreateOrderUseCase;
-  let orderService: jest.Mocked<OrderService>;
-  let pricingPort: jest.Mocked<PricingPort>;
+  let orderRepository: jest.Mocked<OrderRepository>;
 
   beforeEach(async () => {
-    const mockOrderService = {
+    const mockOrderRepository = {
       createOrder: jest.fn(),
     } as any;
-
-    const mockPricing = {
-      quote: jest.fn(),
-    };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CreateOrderUseCase,
-        { provide: OrderService, useValue: mockOrderService },
-        { provide: PRICING_PORT, useValue: mockPricing },
+        { provide: ORDER_REPOSITORY, useValue: mockOrderRepository },
       ],
     }).compile();
 
     useCase = module.get<CreateOrderUseCase>(CreateOrderUseCase);
-    orderService = module.get(OrderService);
-    pricingPort = module.get(PRICING_PORT);
+    orderRepository = module.get(ORDER_REPOSITORY);
   });
 
   it('should be defined', () => {
@@ -38,14 +28,7 @@ describe('CreateOrderUseCase', () => {
   });
 
   it('should create an order with pricing calculated', async () => {
-    const mockPriceBreakdown = {
-      subtotal: 10.5,
-      tax: 0.63,
-      total: 11.13,
-    };
-
-    pricingPort.quote.mockReturnValue(mockPriceBreakdown);
-    orderService.createOrder.mockReturnValue({
+    orderRepository.createOrder.mockReturnValue({
       id: '#001',
       customerName: 'John Doe',
       items: [],
@@ -66,9 +49,9 @@ describe('CreateOrderUseCase', () => {
     const result = await useCase.execute(request);
 
     expect(result.id).toBe('#001');
+    // calculateTotalWithTax: (3*2 + 4.5*1) = 10.5, tax = 0.63, total = 11.13
     expect(result.totalAmount).toBe(11.13);
-    expect(pricingPort.quote).toHaveBeenCalled();
-    expect(orderService.createOrder).toHaveBeenCalledWith(
+    expect(orderRepository.createOrder).toHaveBeenCalledWith(
       'John Doe',
       request.items,
       11.13,

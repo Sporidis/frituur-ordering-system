@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GetOrderUseCase } from '@modules/ordering/application/use-cases/get-order.usecase';
-import { ORDER_REPOSITORY } from '@modules/ordering/domain/repositories/order.repository';
+import { GetOrderUseCase } from '@modules/order/application/use-cases/get-order.usecase';
+import { ORDER_REPOSITORY } from '@modules/order/domain/repositories/order.repository';
 
 describe('GetOrderUseCase', () => {
   let useCase: GetOrderUseCase;

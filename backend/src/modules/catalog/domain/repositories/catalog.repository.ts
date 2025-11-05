@@ -6,10 +6,10 @@ import type {
 } from '../../domain/models';
 
 export interface CatalogRepository {
-  getCategories(): Category[];
-  getCategoryTranslations(): CategoryTranslation[];
-  getMenuItems(): MenuItem[];
-  getMenuItemTranslations(): MenuItemTranslation[];
+  getCategories(): Promise<Category[]>;
+  getCategoryTranslations(): Promise<CategoryTranslation[]>;
+  getMenuItems(): Promise<MenuItem[]>;
+  getMenuItemTranslations(): Promise<MenuItemTranslation[]>;
 }
 
 export const CATALOG_REPOSITORY = 'CATALOG_REPOSITORY';

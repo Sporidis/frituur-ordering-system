@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UpdateOrderStatusHttpController } from '@modules/ordering/presentation/http/controllers/update-order-status.http.controller';
-import { UpdateOrderStatusEndpoint } from '@modules/ordering/presentation/http/endpoints/update-order-status.endpoint';
-import { OrderStatus } from '@modules/ordering/domain/order.types';
+import { UpdateOrderStatusHttpController } from '@modules/order/presentation/http/controllers/update-order-status.http.controller';
+import { UpdateOrderStatusEndpoint } from '@modules/order/presentation/http/endpoints/update-order-status.endpoint';
+import { OrderStatus } from '@modules/order/domain/order.types';
 
 describe('UpdateOrderStatusHttpController', () => {
   let controller: UpdateOrderStatusHttpController;

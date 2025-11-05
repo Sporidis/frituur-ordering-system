@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateOrderEndpoint } from '@modules/ordering/presentation/http/endpoints/create-order.endpoint';
-import { CreateOrderController } from '@modules/ordering/presentation/controllers/create-order.controller';
+import { CreateOrderEndpoint } from '@modules/order/presentation/http/endpoints/create-order.endpoint';
+import { CreateOrderController } from '@modules/order/presentation/controllers/create-order.controller';
 import { I18nService } from '@modules/i18n/application/i18n.service';
 
 describe('CreateOrderEndpoint', () => {

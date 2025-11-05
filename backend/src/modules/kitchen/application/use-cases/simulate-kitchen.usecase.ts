@@ -1,5 +1,6 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Logger } from '@nestjs/common';
 import { UseCase } from '@shared/application/usecase.interface';
+import type { OutputPort } from '@shared/application/contracts/output-port.interface';
 import {
   SimulateKitchenRequest,
   SimulateKitchenResponse,
@@ -7,23 +8,21 @@ import {
 import {
   ORDER_REPOSITORY,
   type OrderRepository,
-} from '@modules/ordering/domain/repositories/order.repository';
-import { OrderStatus } from '@modules/ordering/domain';
+} from '@modules/order/domain/repositories/order.repository';
+import { OrderStatus } from '@modules/order/domain';
 
-@Injectable()
-export class SimulateKitchenUseCase
-  implements UseCase<SimulateKitchenRequest, SimulateKitchenResponse>
-{
+export class SimulateKitchenUseCase implements UseCase<SimulateKitchenRequest> {
   private logger = new Logger('SimulateKitchenUseCase');
 
   constructor(
+    private readonly outputPort: OutputPort<SimulateKitchenResponse>,
     @Inject(ORDER_REPOSITORY) private readonly orders: OrderRepository,
   ) {}
 
-  execute(_: SimulateKitchenRequest): SimulateKitchenResponse {
+  async execute(_: SimulateKitchenRequest): Promise<void> {
     this.logger.log('Starting kitchen workflow simulation...');
 
-    const allOrders = this.orders.getAllOrders();
+    const allOrders = await this.orders.getAllOrders();
     const pendingOrders = allOrders.filter(
       (o) => o.status === OrderStatus.PENDING,
     );
@@ -33,14 +32,14 @@ export class SimulateKitchenUseCase
 
     if (pendingOrders.length > 0) {
       const order = pendingOrders[0];
-      this.orders.updateOrderStatus(
+      await this.orders.updateOrderStatus(
         order.id,
         OrderStatus.IN_PROGRESS,
         'kitchen_started_preparing',
       );
 
-      setTimeout(() => {
-        this.orders.updateOrderStatus(
+      setTimeout(async () => {
+        await this.orders.updateOrderStatus(
           order.id,
           OrderStatus.READY,
           'order_ready_for_pickup',
@@ -50,13 +49,13 @@ export class SimulateKitchenUseCase
 
     if (inProgressOrders.length > 0) {
       const order = inProgressOrders[0];
-      this.orders.updateOrderStatus(
+      await this.orders.updateOrderStatus(
         order.id,
         OrderStatus.READY,
         'Your order is ready for pickup!',
       );
     }
 
-    return { message: 'Simulation started' };
+    this.outputPort.present({ message: 'Simulation started' });
   }
 }

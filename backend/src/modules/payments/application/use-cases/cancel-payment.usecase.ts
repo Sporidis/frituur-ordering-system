@@ -1,5 +1,7 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { UseCase } from '@shared/application/usecase.interface';
+import type { OutputPort } from '@shared/application/contracts/output-port.interface';
+import { NotFoundException } from '@shared/application/exceptions/base.exception';
 import {
   PAYMENT_REPOSITORY,
   type IPaymentRepository,
@@ -9,19 +11,27 @@ import {
   type PaymentGatewayPort,
 } from '@modules/payments/domain/ports/payment-gateway.port';
 
-@Injectable()
-export class CancelPaymentUseCase implements UseCase<string, void> {
+export interface CancelPaymentRequest {
+  paymentId: string;
+}
+
+export interface CancelPaymentResponse {
+  success: boolean;
+}
+
+export class CancelPaymentUseCase implements UseCase<CancelPaymentRequest> {
   constructor(
+    private readonly outputPort: OutputPort<CancelPaymentResponse>,
     @Inject(PAYMENT_REPOSITORY)
     private readonly paymentRepository: IPaymentRepository,
     @Inject(PAYMENT_GATEWAY)
     private readonly paymentGateway: PaymentGatewayPort,
   ) {}
 
-  async execute(paymentId: string): Promise<void> {
-    const payment = await this.paymentRepository.findById(paymentId);
+  async execute(input: CancelPaymentRequest): Promise<void> {
+    const payment = await this.paymentRepository.findById(input.paymentId);
     if (!payment) {
-      throw new Error('Payment not found');
+      throw new NotFoundException('Payment', input.paymentId);
     }
 
     if (payment.stripePaymentIntentId) {
@@ -33,5 +43,7 @@ export class CancelPaymentUseCase implements UseCase<string, void> {
     // Business logic in domain entity
     payment.markAsCancelled();
     await this.paymentRepository.save(payment);
+
+    this.outputPort.present({ success: true });
   }
 }

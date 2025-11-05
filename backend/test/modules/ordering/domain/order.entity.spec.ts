@@ -1,5 +1,5 @@
-import { OrderEntity } from '@modules/ordering/domain/order.entity';
-import { OrderStatus } from '@modules/ordering/domain/order.types';
+import { OrderEntity } from '@modules/order/domain/order.entity';
+import { OrderStatus } from '@modules/order/domain/order.types';
 
 describe('OrderEntity', () => {
   it('should calculate total from items', () => {

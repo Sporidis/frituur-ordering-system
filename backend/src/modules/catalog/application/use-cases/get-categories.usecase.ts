@@ -1,10 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { UseCase } from '@shared/application/usecase.interface';
+import type { OutputPort } from '@shared/application/contracts/output-port.interface';
 import {
   CATALOG_REPOSITORY,
   type CatalogRepository,
 } from '../../domain/repositories/catalog.repository';
-import { LocalizedCategory } from '../../domain/models';
+import { CategoryEntity } from '../../domain/category.entity';
+import type { LocalizedCategory } from '../../domain/models';
 
 export interface GetCategoriesRequest {
   locale: string;
@@ -14,36 +16,24 @@ export interface GetCategoriesResponse {
   categories: LocalizedCategory[];
 }
 
-@Injectable()
-export class GetCategoriesUseCase
-  implements UseCase<GetCategoriesRequest, GetCategoriesResponse>
-{
+export class GetCategoriesUseCase implements UseCase<GetCategoriesRequest> {
   constructor(
+    private readonly outputPort: OutputPort<GetCategoriesResponse>,
     @Inject(CATALOG_REPOSITORY) private readonly repo: CatalogRepository,
   ) {}
 
-  execute(request: GetCategoriesRequest): GetCategoriesResponse {
-    const translations = new Map(
-      this.repo
-        .getCategoryTranslations()
-        .filter((ct) => ct.languageCode === request.locale)
-        .map((ct) => [ct.categoryId, ct]),
+  async execute(input: GetCategoriesRequest): Promise<void> {
+    const categories = CategoryEntity.sortByDisplayOrder(
+      await this.repo.getCategories(),
+    );
+    const translations = (await this.repo.getCategoryTranslations()).filter(
+      (ct) => ct.languageCode === input.locale,
+    );
+    const localizedCategories = CategoryEntity.localizeCategories(
+      categories,
+      translations,
     );
 
-    const categories = this.repo
-      .getCategories()
-      .slice()
-      .sort((a, b) => a.displayOrder - b.displayOrder)
-      .map((c) => {
-        const tr = translations.get(c.id);
-        return {
-          id: c.id,
-          name: tr?.name ?? c.id,
-          description: tr?.description,
-          displayOrder: c.displayOrder,
-        } as LocalizedCategory;
-      });
-
-    return { categories };
+    this.outputPort.present({ categories: localizedCategories });
   }
 }

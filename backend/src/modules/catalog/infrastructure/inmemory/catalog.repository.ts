@@ -194,19 +194,19 @@ export class InMemoryCatalogRepository implements CatalogRepository {
       createdAt: new Date(),
     },
   ];
-  getCategories(): Category[] {
-    return this.categories;
+  async getCategories(): Promise<Category[]> {
+    return Promise.resolve(this.categories);
   }
 
-  getCategoryTranslations(): CategoryTranslation[] {
-    return this.categoryTranslations;
+  async getCategoryTranslations(): Promise<CategoryTranslation[]> {
+    return Promise.resolve(this.categoryTranslations);
   }
 
-  getMenuItems(): MenuItem[] {
-    return this.menuItems;
+  async getMenuItems(): Promise<MenuItem[]> {
+    return Promise.resolve(this.menuItems);
   }
 
-  getMenuItemTranslations(): MenuItemTranslation[] {
-    return this.menuItemTranslations;
+  async getMenuItemTranslations(): Promise<MenuItemTranslation[]> {
+    return Promise.resolve(this.menuItemTranslations);
   }
 }

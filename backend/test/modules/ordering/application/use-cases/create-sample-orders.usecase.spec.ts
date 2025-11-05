@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateSampleOrdersUseCase } from '@modules/ordering/application/use-cases/create-sample-orders.usecase';
-import { ORDER_REPOSITORY } from '@modules/ordering/domain/repositories/order.repository';
+import { CreateSampleOrdersUseCase } from '@modules/order/application/use-cases/create-sample-orders.usecase';
+import { ORDER_REPOSITORY } from '@modules/order/domain/repositories/order.repository';
 
 describe('CreateSampleOrdersUseCase', () => {
   let useCase: CreateSampleOrdersUseCase;

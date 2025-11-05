@@ -1,5 +1,7 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { UseCase } from '../../../../shared/application/usecase.interface';
+import { Inject } from '@nestjs/common';
+import { UseCase } from '@shared/application/usecase.interface';
+import type { OutputPort } from '@shared/application/contracts/output-port.interface';
+import { NotFoundException } from '@shared/application/exceptions/base.exception';
 import {
   PAYMENT_REPOSITORY,
   type IPaymentRepository,
@@ -9,25 +11,36 @@ import {
   type PaymentGatewayPort,
 } from '@modules/payments/domain/ports/payment-gateway.port';
 
-@Injectable()
-export class SyncStatusUseCase implements UseCase<string, any> {
+export interface SyncStatusRequest {
+  paymentIntentId: string;
+}
+
+export interface SyncStatusResponse {
+  paymentId: string;
+  status: string;
+}
+
+export class SyncStatusUseCase implements UseCase<SyncStatusRequest> {
   constructor(
+    private readonly outputPort: OutputPort<SyncStatusResponse>,
     @Inject(PAYMENT_REPOSITORY)
     private readonly paymentRepository: IPaymentRepository,
     @Inject(PAYMENT_GATEWAY)
     private readonly paymentGateway: PaymentGatewayPort,
   ) {}
 
-  async execute(paymentIntentId: string) {
+  async execute(input: SyncStatusRequest): Promise<void> {
     const payments = await this.paymentRepository.findAll();
     const payment = payments.find(
-      (p) => p.stripePaymentIntentId === paymentIntentId,
+      (p) => p.stripePaymentIntentId === input.paymentIntentId,
     );
     if (!payment) {
-      throw new Error('Payment not found');
+      throw new NotFoundException('Payment', input.paymentIntentId);
     }
 
-    const intent = await this.paymentGateway.getPaymentIntent(paymentIntentId);
+    const intent = await this.paymentGateway.getPaymentIntent(
+      input.paymentIntentId,
+    );
     const status = intent.status;
 
     // Business logic in domain entity
@@ -40,6 +53,9 @@ export class SyncStatusUseCase implements UseCase<string, any> {
     }
 
     await this.paymentRepository.save(payment);
-    return { paymentId: payment.id, status: payment.status };
+    this.outputPort.present({
+      paymentId: payment.id,
+      status: payment.status,
+    });
   }
 }

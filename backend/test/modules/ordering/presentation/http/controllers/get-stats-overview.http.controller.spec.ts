@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GetStatsOverviewHttpController } from '@modules/ordering/presentation/http/controllers/get-stats-overview.http.controller';
-import { GetStatsOverviewEndpoint } from '@modules/ordering/presentation/http/endpoints/get-stats-overview.endpoint';
+import { GetStatsOverviewHttpController } from '@modules/order/presentation/http/controllers/get-stats-overview.http.controller';
+import { GetStatsOverviewEndpoint } from '@modules/order/presentation/http/endpoints/get-stats-overview.endpoint';
 
 describe('GetStatsOverviewHttpController', () => {
   let controller: GetStatsOverviewHttpController;

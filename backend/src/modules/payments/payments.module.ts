@@ -3,8 +3,6 @@ import { PAYMENT_NEST_CONTROLLERS } from './presentation/http/controllers';
 import { InMemoryPaymentRepository } from './infrastructure/payment-repository.impl';
 import { StripePaymentGateway } from './infrastructure/stripe-payment-gateway';
 import { PAYMENT_HTTP_ENDPOINTS } from './presentation/http/endpoints';
-import { PAYMENT_HTTP_CONTROLLERS } from './presentation/controllers';
-import { PAYMENT_USE_CASES } from './application/use-cases';
 import { PAYMENT_REPOSITORY } from './domain/payment-repository.interface';
 import { PAYMENT_GATEWAY } from './domain/ports/payment-gateway.port';
 
@@ -14,8 +12,6 @@ import { PAYMENT_GATEWAY } from './domain/ports/payment-gateway.port';
     StripePaymentGateway,
     { provide: PAYMENT_REPOSITORY, useClass: InMemoryPaymentRepository },
     { provide: PAYMENT_GATEWAY, useExisting: StripePaymentGateway },
-    ...PAYMENT_USE_CASES,
-    ...PAYMENT_HTTP_CONTROLLERS,
     ...PAYMENT_HTTP_ENDPOINTS,
   ],
   exports: [PAYMENT_REPOSITORY, PAYMENT_GATEWAY],

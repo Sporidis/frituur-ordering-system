@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GetStatsOverviewUseCase } from '@modules/ordering/application/use-cases/get-stats-overview.usecase';
-import { ORDER_REPOSITORY } from '@modules/ordering/domain/repositories/order.repository';
+import { GetStatsOverviewUseCase } from '@modules/order/application/use-cases/get-stats-overview.usecase';
+import { ORDER_REPOSITORY } from '@modules/order/domain/repositories/order.repository';
 
 describe('GetStatsOverviewUseCase', () => {
   let useCase: GetStatsOverviewUseCase;

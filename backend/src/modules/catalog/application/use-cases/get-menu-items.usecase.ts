@@ -1,10 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { UseCase } from '@shared/application/usecase.interface';
+import type { OutputPort } from '@shared/application/contracts/output-port.interface';
 import {
   CATALOG_REPOSITORY,
   type CatalogRepository,
 } from '../../domain/repositories/catalog.repository';
-import { LocalizedMenuItem } from '../../domain/models';
+import { MenuItemEntity } from '../../domain/menu-item.entity';
+import type { LocalizedMenuItem } from '../../domain/models';
 
 export interface GetMenuItemsRequest {
   locale: string;
@@ -15,39 +17,23 @@ export interface GetMenuItemsResponse {
   items: LocalizedMenuItem[];
 }
 
-@Injectable()
-export class GetMenuItemsUseCase
-  implements UseCase<GetMenuItemsRequest, GetMenuItemsResponse>
-{
+export class GetMenuItemsUseCase implements UseCase<GetMenuItemsRequest> {
   constructor(
+    private readonly outputPort: OutputPort<GetMenuItemsResponse>,
     @Inject(CATALOG_REPOSITORY) private readonly repo: CatalogRepository,
   ) {}
 
-  execute(request: GetMenuItemsRequest): GetMenuItemsResponse {
-    const translations = new Map(
-      this.repo
-        .getMenuItemTranslations()
-        .filter((mt) => mt.languageCode === request.locale)
-        .map((mt) => [mt.menuItemId, mt]),
+  async execute(input: GetMenuItemsRequest): Promise<void> {
+    const items = await this.repo.getMenuItems();
+    const translations = (await this.repo.getMenuItemTranslations()).filter(
+      (mt) => mt.languageCode === input.locale,
+    );
+    const localizedItems = MenuItemEntity.localizeMenuItems(
+      items,
+      translations,
+      input.categoryId,
     );
 
-    const items = this.repo
-      .getMenuItems()
-      .filter((i) => !request.categoryId || i.categoryId === request.categoryId)
-      .map((i) => {
-        const tr = translations.get(i.id);
-        return {
-          id: i.id,
-          categoryId: i.categoryId,
-          name: tr?.name ?? i.id,
-          description: tr?.description,
-          price: i.basePrice,
-          preparationTimeMinutes: i.preparationTimeMinutes,
-          allergens: i.allergens,
-          isAvailable: i.isAvailable,
-        } as LocalizedMenuItem;
-      });
-
-    return { items };
+    this.outputPort.present({ items: localizedItems });
   }
 }

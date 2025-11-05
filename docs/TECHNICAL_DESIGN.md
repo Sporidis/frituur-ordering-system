@@ -26,8 +26,7 @@ graph TB
         
         subgraph "Modules"
             CAT[Catalog<br/>Menu & Items]
-            ORD[Ordering<br/>Cart & Orders]
-            PRC[Pricing<br/>Calculate Costs]
+            ORD[Order<br/>Cart, Orders & Pricing]
             PAY[Payments<br/>Handle Money]
             KIT[Kitchen<br/>Order Queue]
             I18N[Languages<br/>Dutch & English]
@@ -52,7 +51,7 @@ graph TB
 
 - **Users** interact with the app (customers order, admins manage)
 - **My Application** processes everything (the NestJS server)
-- **Modules** are doing there own jobs (catalog, ordering, pricing, etc.)
+- **Modules** are doing there own jobs (catalog, order, payments, etc.)
 - **Database** stores all the information
 - **Stripe** handles payments securely
 
@@ -64,20 +63,17 @@ The system is organized into several core modules, each responsible for a specif
 graph LR
     subgraph "My System House"
         A[Catalog<br/>Menu & Items]
-        B[Ordering<br/>Cart & Orders]
-        C[Pricing<br/>Calculate Costs]
+        B[Order<br/>Cart, Orders & Pricing]
         D[Payments<br/>Handle Money]
         E[Kitchen<br/>Order Queue]
         F[Languages<br/>Dutch & English]
     end
     
     A --> B
-    B --> C
-    C --> D
+    B --> D
     D --> E
     F --> A
     F --> B
-    F --> C
     F --> D
     F --> E
 ```
@@ -91,21 +87,16 @@ graph LR
 - Allergen information (gluten, nuts, etc.)
 - Stock availability (what's available today)
 
-### Ordering Module
+### Order Module
 
-**What it does**: Handles the ordering process
+**What it does**: Handles the ordering process, pricing, and timing
 
 - Shopping cart (add/remove items)
 - Order creation (turn cart into order)
 - Order tracking (where is my food?)
-
-### Pricing Module
-
-**What it does**: Figures out costs and timing
-
-- Price calculations (base price + extras)
+- Price calculations (base price + tax)
 - Ready time estimation (when will it be ready?)
-- Discount logic (special offers)
+- Quote endpoint for price estimates
 
 ### Payments Module
 
@@ -421,11 +412,10 @@ graph TD
     A --> F[config/<br/>Configuration]
     
     D --> D1[catalog/<br/>Menu Management]
-    D --> D2[ordering/<br/>Order Processing]
-    D --> D3[pricing/<br/>Price Calculation]
-    D --> D4[payments/<br/>Payment Handling]
-    D --> D5[kitchen/<br/>Kitchen Workflow]
-    D --> D6[i18n/<br/>Language Support]
+    D --> D2[order/<br/>Order Processing & Pricing]
+    D --> D3[payments/<br/>Payment Handling]
+    D --> D4[kitchen/<br/>Kitchen Workflow]
+    D --> D5[i18n/<br/>Language Support]
     
     E --> E1[database/<br/>Database Connection]
     E --> E2[websocket/<br/>Real-time Updates]
@@ -440,8 +430,7 @@ graph TD
 | Module | Department Job | Who Uses It |
 |--------|----------------|-------------|
 | **catalog** | Manages menu items and categories | Customers browsing, admins editing |
-| **ordering** | Handles shopping cart and orders | Customers placing orders |
-| **pricing** | Calculates costs and timing | System automatically |
+| **order** | Handles shopping cart, orders, pricing, and timing | Customers placing orders, system calculations |
 | **payments** | Processes payments with Stripe | Customers paying |
 | **kitchen** | Manages order queue and status | Kitchen staff |
 | **i18n** | Handles Dutch/English switching | All users |
@@ -482,7 +471,7 @@ graph LR
     A --> C[Integration Tests<br/>Test how parts work together]
     A --> D[End-to-End Tests<br/>Test complete user flows]
     
-    B --> B1[Backend: Test pricing calculations]
+    B --> B1[Backend: Test order calculations]
     B --> B2[Frontend: Test UI components]
     
     C --> C1[Test API endpoints]

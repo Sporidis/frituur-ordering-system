@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { CreateRefundEndpoint } from '../endpoints/create-refund.endpoint';
-import type { CreateRefundRequest } from '../../contracts/requests/create-refund.request';
+import type { CreateRefundRequest } from '@modules/payments/application/use-cases/create-refund.usecase';
 import { CurrentLocale } from '@modules/i18n/presentation/http/decorators/current-locale.decorator';
 
 @Controller('payments')

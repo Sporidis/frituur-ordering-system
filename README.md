@@ -23,17 +23,20 @@ A complete ordering system that lets customers order food online and helps kitch
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - **Flutter 3.16+** - Cross-platform UI framework
 - **Provider** - State management
 - **WebSocket** - Real-time communication
 
 ### Backend
+
 - **NestJS** - Node.js framework
 - **TypeORM** - Database ORM
 - **PostgreSQL 14+** - Primary database
 - **WebSocket Gateway** - Real-time updates
 
 ### External Services
+
 - **Stripe** - Payment processing
 - **Docker** - Containerization
 
@@ -49,12 +52,14 @@ A complete ordering system that lets customers order food online and helps kitch
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd frituur-ordering-system
    ```
 
 2. **Set up the backend**
+
    ```bash
    cd backend
    npm install
@@ -64,6 +69,7 @@ A complete ordering system that lets customers order food online and helps kitch
    ```
 
 3. **Set up the frontend**
+
    ```bash
    cd frontend
    flutter pub get
@@ -71,6 +77,7 @@ A complete ordering system that lets customers order food online and helps kitch
    ```
 
 4. **Set up the database**
+
    ```bash
    createdb frituur_ordering
    npm run migration:run
@@ -132,6 +139,7 @@ The system follows a **Modular Monolith** architecture with clear separation of 
 ## 🧪 Testing
 
 ### Backend Tests
+
 ```bash
 cd backend
 npm run test              # Unit tests
@@ -140,6 +148,7 @@ npm run test:cov          # Coverage report
 ```
 
 ### Frontend Tests
+
 ```bash
 cd frontend
 flutter test              # Unit tests
@@ -158,6 +167,7 @@ flutter test integration_test/  # Integration tests
 ### Production Deployment
 
 1. **Build the applications**
+
    ```bash
    # Backend
    cd backend && npm run build
@@ -167,6 +177,7 @@ flutter test integration_test/  # Integration tests
    ```
 
 2. **Deploy with Docker**
+
    ```bash
    docker-compose -f docker-compose.prod.yml up -d
    ```
@@ -184,7 +195,7 @@ flutter test integration_test/  # Integration tests
 
 **Course**: Software Engineering Project  
 **Student**: Nikolaos Sporidis  
-**Duration**: 6 weeks 
+**Duration**: 6 weeks
 **Institution**: Howest Brugge
 
 ## 🤝 Contributing

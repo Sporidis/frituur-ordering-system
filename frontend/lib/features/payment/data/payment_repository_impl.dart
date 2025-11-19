@@ -1,21 +1,26 @@
-import '../../../shared/services/payment_service.dart';
+import 'package:frituur_ordering_system/features/payment/data/datasources/payment_remote_datasource.dart';
+
 import '../../../core/utils/result.dart';
 import '../domain/entities.dart';
 import '../domain/repositories/payment_repository.dart';
 
-class HttpPaymentRepository implements PaymentRepository {
+class PaymentRepositoryImpl implements PaymentRepository {
+  final PaymentRemoteDataSource _dataSource;
+
+  PaymentRepositoryImpl(this._dataSource);
+
   @override
   Future<Result<PaymentIntent>> createPaymentIntent({
     required double amount,
     String currency = 'eur',
     String? orderId,
-    String? customerName,
+    String? customerId,
   }) async {
-    final intent = await PaymentService.createPaymentIntent(
+    final intent = await _dataSource.createPaymentIntent(
       amount: amount,
       currency: currency,
       orderId: orderId,
-      customerName: customerName,
+      customerId: customerId,
     );
     return intent != null
         ? Success(intent)
@@ -28,7 +33,7 @@ class HttpPaymentRepository implements PaymentRepository {
     required String customerName,
     required String paymentIntentId,
   }) async {
-    final result = await PaymentService.processPayment(
+    final result = await _dataSource.processPayment(
       clientSecret: clientSecret,
       customerName: customerName,
       paymentIntentId: paymentIntentId,
@@ -42,7 +47,7 @@ class HttpPaymentRepository implements PaymentRepository {
     double? amount,
     String? reason,
   }) async {
-    final refund = await PaymentService.createRefund(
+    final refund = await _dataSource.createRefund(
       paymentIntentId: paymentIntentId,
       amount: amount,
       reason: reason,
@@ -54,7 +59,7 @@ class HttpPaymentRepository implements PaymentRepository {
 
   @override
   Future<Result<PaymentIntent>> getPaymentIntent(String id) async {
-    final intent = await PaymentService.getPaymentIntent(id);
+    final intent = await _dataSource.getPaymentIntent(id);
     return intent != null
         ? Success(intent)
         : const ErrorResult('Payment intent not found');

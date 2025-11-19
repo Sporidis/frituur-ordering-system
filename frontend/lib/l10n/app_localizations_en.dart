@@ -400,4 +400,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get refundFailed => 'Refund failed';
+
+  @override
+  String get adminPanel => 'Admin Panel';
+
+  @override
+  String get adminLogin => 'Admin Login';
+
+  @override
+  String loggedInAs(String role) {
+    return 'Logged in as $role';
+  }
+
+  @override
+  String get testAuthentication => 'Test authentication';
+
+  @override
+  String get loggedOut => 'Logged out';
 }

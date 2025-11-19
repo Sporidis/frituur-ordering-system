@@ -400,4 +400,21 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get refundFailed => 'Terugbetaling mislukt';
+
+  @override
+  String get adminPanel => 'Beheerpaneel';
+
+  @override
+  String get adminLogin => 'Beheerder Login';
+
+  @override
+  String loggedInAs(String role) {
+    return 'Ingelogd als $role';
+  }
+
+  @override
+  String get testAuthentication => 'Test authenticatie';
+
+  @override
+  String get loggedOut => 'Uitgelogd';
 }

@@ -525,5 +525,23 @@
   "refundSuccessful": "Refund successful",
   "@refundSuccessful": {"description": "Refund success message"},
   "refundFailed": "Refund failed",
-  "@refundFailed": {"description": "Refund failure message"}
+  "@refundFailed": {"description": "Refund failure message"},
+  "adminPanel": "Admin Panel",
+  "@adminPanel": {"description": "Admin panel title"},
+  "adminLogin": "Admin Login",
+  "@adminLogin": {"description": "Admin login title"},
+  "loggedInAs": "Logged in as {role}",
+  "@loggedInAs": {
+    "description": "Message showing logged in role",
+    "placeholders": {
+      "role": {
+        "type": "String",
+        "description": "The user's role"
+      }
+    }
+  },
+  "testAuthentication": "Test authentication",
+  "@testAuthentication": {"description": "Test authentication description"},
+  "loggedOut": "Logged out",
+  "@loggedOut": {"description": "Logged out message"}
 }

@@ -122,5 +122,10 @@
   "refund": "Terugbetaling",
   "optionalRefundAmountHint": "Optioneel: specificeer terugbetalingsbedrag (standaard volledig)",
   "refundSuccessful": "Terugbetaling succesvol",
-  "refundFailed": "Terugbetaling mislukt"
+  "refundFailed": "Terugbetaling mislukt",
+  "adminPanel": "Beheerpaneel",
+  "adminLogin": "Beheerder Login",
+  "loggedInAs": "Ingelogd als {role}",
+  "testAuthentication": "Test authenticatie",
+  "loggedOut": "Uitgelogd"
 }

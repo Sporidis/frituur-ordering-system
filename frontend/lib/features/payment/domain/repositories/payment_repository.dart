@@ -6,7 +6,7 @@ abstract class PaymentRepository {
     required double amount,
     String currency,
     String? orderId,
-    String? customerName,
+    String? customerId,
   });
 
   Future<Result<PaymentResult>> processPayment({

@@ -832,6 +832,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Refund failed'**
   String get refundFailed;
+
+  /// Admin panel title
+  ///
+  /// In en, this message translates to:
+  /// **'Admin Panel'**
+  String get adminPanel;
+
+  /// Admin login title
+  ///
+  /// In en, this message translates to:
+  /// **'Admin Login'**
+  String get adminLogin;
+
+  /// Message showing logged in role
+  ///
+  /// In en, this message translates to:
+  /// **'Logged in as {role}'**
+  String loggedInAs(String role);
+
+  /// Test authentication description
+  ///
+  /// In en, this message translates to:
+  /// **'Test authentication'**
+  String get testAuthentication;
+
+  /// Logged out message
+  ///
+  /// In en, this message translates to:
+  /// **'Logged out'**
+  String get loggedOut;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

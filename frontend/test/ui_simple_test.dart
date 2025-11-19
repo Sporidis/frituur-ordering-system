@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:frituur_ordering_system/shared/mod.dart';
 import 'package:provider/provider.dart';
 import 'package:frituur_ordering_system/l10n/app_localizations.dart';
-import 'package:frituur_ordering_system/shared/providers/language_provider.dart';
 
 void main() {
   group('UI Language Switch Performance Tests', () {

@@ -1,0 +1,93 @@
+import 'package:flutter/material.dart';
+import 'package:frituur_ordering_system/l10n/app_localizations.dart';
+import 'package:frituur_ordering_system/features/payment/mod.dart' as payment;
+
+class PaymentIntentDisplayWidget extends StatelessWidget {
+  final payment.PaymentIntent paymentIntent;
+  final bool isProcessing;
+  final VoidCallback onProcessPayment;
+  final VoidCallback? onRefresh;
+
+  const PaymentIntentDisplayWidget({
+    super.key,
+    required this.paymentIntent,
+    required this.isProcessing,
+    required this.onProcessPayment,
+    this.onRefresh,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.paymentIntentCreated,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.blue.withValues(alpha: 0.1),
+                border: Border.all(color: Colors.blue),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('${l10n.id} ${paymentIntent.id}'),
+                  Text(
+                    '${l10n.amountLabel} €${paymentIntent.amount.toStringAsFixed(2)}',
+                  ),
+                  Text(
+                    '${l10n.currency} ${paymentIntent.currency.toUpperCase()}',
+                  ),
+                  Text('${l10n.status} ${paymentIntent.status}'),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Process Payment Button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: isProcessing ? null : onProcessPayment,
+                icon: const Icon(Icons.payment),
+                label: Text(isProcessing ? l10n.processing : 'Pay with Stripe'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                ),
+              ),
+            ),
+
+            // Refresh Button
+            if (paymentIntent.status != 'succeeded' && onRefresh != null) ...[
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: isProcessing ? null : onRefresh,
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('Refresh Status'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}

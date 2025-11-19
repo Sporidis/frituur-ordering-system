@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:frituur_ordering_system/shared/providers/language_provider.dart';
+import 'package:frituur_ordering_system/shared/mod.dart';
 
 void main() {
   group('Language Switch Performance Tests', () {

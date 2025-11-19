@@ -1,7 +1,8 @@
 import 'dart:async';
-import '../../../../shared/models/ws_models.dart';
-import '../../../../core/utils/result.dart';
+import 'package:frituur_ordering_system/features/order/mod.dart';
+
 import '../entities.dart';
+import '../../../../core/utils/result.dart';
 
 abstract class WebSocketRepository {
   // Connection management

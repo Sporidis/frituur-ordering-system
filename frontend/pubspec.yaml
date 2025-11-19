@@ -40,6 +40,9 @@ dependencies:
   # State management
   provider: ^6.1.1
   
+  # Dependency Injection
+  get_it: ^8.0.0
+  
   # Internationalization
   intl: ^0.20.2
   
@@ -57,6 +60,7 @@ dependencies:
   
   # Environment variables
   flutter_dotenv: ^5.1.0
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:

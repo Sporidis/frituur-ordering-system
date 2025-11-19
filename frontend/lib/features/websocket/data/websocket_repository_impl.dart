@@ -1,20 +1,28 @@
 import 'dart:async';
 
-import '../../../shared/services/websocket_service.dart';
-import '../../../shared/models/ws_models.dart';
-import '../../../core/utils/result.dart';
-import '../domain/entities.dart';
-import '../domain/repositories/websocket_repository.dart';
+import 'package:frituur_ordering_system/features/order/mod.dart';
+import 'package:frituur_ordering_system/features/websocket/data/datasources/websocket_datasource.dart';
+import 'package:frituur_ordering_system/features/websocket/domain/repositories/websocket_repository.dart';
+import 'package:frituur_ordering_system/features/websocket/domain/entities.dart';
+import 'package:frituur_ordering_system/core/utils/result.dart';
 
-class SocketIoWebSocketRepository implements WebSocketRepository {
-  final WebSocketService _webSocketService;
+class WebSocketRepositoryImpl implements WebSocketRepository {
+  final WebSocketDataSource _dataSource;
+  final List<Order> _orders = [];
 
-  SocketIoWebSocketRepository(this._webSocketService);
+  WebSocketRepositoryImpl(this._dataSource) {
+    // Listen to new orders from data source
+    _dataSource.newOrderStream.listen((order) {
+      if (!_orders.any((o) => o.id == order.id)) {
+        _orders.add(order);
+      }
+    });
+  }
 
   @override
   Future<Result<void>> connect() async {
     try {
-      await _webSocketService.connect();
+      await _dataSource.connect();
       return const Success(null);
     } catch (e) {
       return ErrorResult('Failed to connect: $e');
@@ -24,7 +32,7 @@ class SocketIoWebSocketRepository implements WebSocketRepository {
   @override
   Future<Result<void>> disconnect() async {
     try {
-      _webSocketService.disconnect();
+      await _dataSource.disconnect();
       return const Success(null);
     } catch (e) {
       return ErrorResult('Failed to disconnect: $e');
@@ -32,20 +40,15 @@ class SocketIoWebSocketRepository implements WebSocketRepository {
   }
 
   @override
-  bool get isConnected => _webSocketService.isConnected;
+  bool get isConnected => _dataSource.isConnected;
 
   @override
-  Stream<bool> get connectionStream async* {
-    yield _webSocketService.isConnected;
-    await for (final _ in _webSocketService.orderStatusStream) {
-      yield _webSocketService.isConnected;
-    }
-  }
+  Stream<bool> get connectionStream => _dataSource.connectionStream;
 
   @override
   Future<Result<void>> joinOrderRoom(String orderId) async {
     try {
-      _webSocketService.joinOrderRoom(orderId);
+      await _dataSource.joinOrderRoom(orderId);
       return const Success(null);
     } catch (e) {
       return ErrorResult('Failed to join order room: $e');
@@ -55,7 +58,7 @@ class SocketIoWebSocketRepository implements WebSocketRepository {
   @override
   Future<Result<void>> leaveOrderRoom(String orderId) async {
     try {
-      _webSocketService.leaveOrderRoom(orderId);
+      await _dataSource.leaveOrderRoom(orderId);
       return const Success(null);
     } catch (e) {
       return ErrorResult('Failed to leave order room: $e');
@@ -63,23 +66,26 @@ class SocketIoWebSocketRepository implements WebSocketRepository {
   }
 
   @override
-  String? get currentOrderId => _webSocketService.currentOrderId;
+  String? get currentOrderId => _dataSource.currentOrderId;
 
   @override
-  List<Order> get orders => _webSocketService.orders;
+  List<Order> get orders => List.unmodifiable(_orders);
 
   @override
   Stream<List<Order>> get ordersStream async* {
-    yield _webSocketService.orders;
-    await for (final _ in _webSocketService.orderStatusStream) {
-      yield _webSocketService.orders;
+    yield List.unmodifiable(_orders);
+    await for (final _ in _dataSource.newOrderStream) {
+      yield List.unmodifiable(_orders);
     }
   }
 
   @override
   Future<Result<Order?>> getOrderById(String orderId) async {
     try {
-      final order = _webSocketService.getOrderById(orderId);
+      final order = _orders.firstWhere(
+        (o) => o.id == orderId,
+        orElse: () => throw Exception('Order not found'),
+      );
       return Success(order);
     } catch (e) {
       return ErrorResult('Failed to get order: $e');
@@ -89,7 +95,9 @@ class SocketIoWebSocketRepository implements WebSocketRepository {
   @override
   Future<Result<void>> addOrder(Order order) async {
     try {
-      _webSocketService.addOrder(order);
+      if (!_orders.any((o) => o.id == order.id)) {
+        _orders.add(order);
+      }
       return const Success(null);
     } catch (e) {
       return ErrorResult('Failed to add order: $e');
@@ -99,7 +107,7 @@ class SocketIoWebSocketRepository implements WebSocketRepository {
   @override
   Future<Result<void>> clearOrders() async {
     try {
-      _webSocketService.clearOrders();
+      _orders.clear();
       return const Success(null);
     } catch (e) {
       return ErrorResult('Failed to clear orders: $e');
@@ -108,12 +116,12 @@ class SocketIoWebSocketRepository implements WebSocketRepository {
 
   @override
   Stream<OrderStatusUpdate> get orderStatusStream =>
-      _webSocketService.orderStatusStream;
+      _dataSource.orderStatusStream;
 
   @override
   Future<Result<void>> pingServer() async {
     try {
-      _webSocketService.pingServer();
+      await _dataSource.pingServer();
       return const Success(null);
     } catch (e) {
       return ErrorResult('Failed to ping server: $e');
@@ -123,7 +131,7 @@ class SocketIoWebSocketRepository implements WebSocketRepository {
   @override
   Future<Result<void>> requestConnectionStats() async {
     try {
-      _webSocketService.requestConnectionStats();
+      await _dataSource.requestConnectionStats();
       return const Success(null);
     } catch (e) {
       return ErrorResult('Failed to request connection stats: $e');
@@ -131,9 +139,9 @@ class SocketIoWebSocketRepository implements WebSocketRepository {
   }
 
   @override
-  Stream<ServerPong> get pongStream => _webSocketService.pongStream;
+  Stream<ServerPong> get pongStream => _dataSource.pongStream;
 
   @override
   Stream<ConnectionStats> get connectionStatsStream =>
-      _webSocketService.connectionStatsStream;
+      _dataSource.connectionStatsStream;
 }

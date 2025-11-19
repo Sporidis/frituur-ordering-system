@@ -20,14 +20,14 @@ class PaymentViewModel extends ChangeNotifier {
   Future<Result<PaymentIntent>> create(
     double amount, {
     String? orderId,
-    String? customer,
+    String? customerId,
   }) async {
     _loading = true;
     notifyListeners();
     final res = await repository.createPaymentIntent(
       amount: amount,
       orderId: orderId,
-      customerName: customer,
+      customerId: customerId,
     );
     res.when(success: (i) => _intent = i, error: (_) {});
     _loading = false;

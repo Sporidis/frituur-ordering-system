@@ -1,11 +1,19 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
-import '../../../shared/models/ws_models.dart';
-import '../domain/entities.dart';
+import 'package:frituur_ordering_system/features/order/mod.dart';
 import '../domain/repositories/websocket_repository.dart';
-import '../../../core/utils/result.dart';
+import '../domain/entities.dart';
+import '../../../../core/utils/result.dart';
 
 class WebSocketViewModel extends ChangeNotifier {
   final WebSocketRepository _repository;
+
+  // Stream subscriptions that need to be cancelled on dispose
+  StreamSubscription<bool>? _connectionSubscription;
+  StreamSubscription<List<Order>>? _ordersSubscription;
+  StreamSubscription<OrderStatusUpdate>? _orderStatusSubscription;
+  StreamSubscription<ServerPong>? _pongSubscription;
+  StreamSubscription<ConnectionStats>? _connectionStatsSubscription;
 
   WebSocketViewModel(this._repository);
 
@@ -35,31 +43,56 @@ class WebSocketViewModel extends ChangeNotifier {
 
   // Initialize streams
   void initialize() {
-    _repository.connectionStream.listen((connected) {
-      _isConnected = connected;
-      notifyListeners();
+    _connectionSubscription = _repository.connectionStream.listen((connected) {
+      if (!_isDisposed) {
+        _isConnected = connected;
+        notifyListeners();
+      }
     });
 
-    _repository.ordersStream.listen((orders) {
-      _orders.clear();
-      _orders.addAll(orders);
-      notifyListeners();
+    _ordersSubscription = _repository.ordersStream.listen((orders) {
+      if (!_isDisposed) {
+        _orders.clear();
+        _orders.addAll(orders);
+        notifyListeners();
+      }
     });
 
-    _repository.orderStatusStream.listen((update) {
-      _lastStatusUpdate = update;
-      notifyListeners();
+    _orderStatusSubscription = _repository.orderStatusStream.listen((update) {
+      if (!_isDisposed) {
+        _lastStatusUpdate = update;
+        notifyListeners();
+      }
     });
 
-    _repository.pongStream.listen((pong) {
-      _lastPong = pong;
-      notifyListeners();
+    _pongSubscription = _repository.pongStream.listen((pong) {
+      if (!_isDisposed) {
+        _lastPong = pong;
+        notifyListeners();
+      }
     });
 
-    _repository.connectionStatsStream.listen((stats) {
-      _lastConnectionStats = stats;
-      notifyListeners();
+    _connectionStatsSubscription = _repository.connectionStatsStream.listen((
+      stats,
+    ) {
+      if (!_isDisposed) {
+        _lastConnectionStats = stats;
+        notifyListeners();
+      }
     });
+  }
+
+  bool _isDisposed = false;
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    _connectionSubscription?.cancel();
+    _ordersSubscription?.cancel();
+    _orderStatusSubscription?.cancel();
+    _pongSubscription?.cancel();
+    _connectionStatsSubscription?.cancel();
+    super.dispose();
   }
 
   // Connection management
@@ -148,8 +181,6 @@ class WebSocketViewModel extends ChangeNotifier {
     final result = await _repository.addOrder(order);
     result.when(
       success: (_) {
-        // Add order to local list immediately for UI responsiveness
-        // The stream will also update the list, but this ensures immediate feedback
         if (!_orders.any((existingOrder) => existingOrder.id == order.id)) {
           _orders.add(order);
           notifyListeners();

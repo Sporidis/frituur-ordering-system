@@ -16,6 +16,7 @@ class AppConstants {
   static const double cardSpacing = 20.0;
   static const double buttonSpacing = 8.0;
 
+
   // Sample Data
   static const String defaultCustomerName = 'Test Customer';
   static const List<Map<String, dynamic>> sampleOrderItems = [

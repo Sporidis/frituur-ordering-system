@@ -3,13 +3,14 @@ dotenv.config();
 
 export const stripeConfig = {
   secretKey:
-    process.env.STRIPE_SECRET_KEY || 'sk_test_your_stripe_test_secret_key_here',
+    process.env.STRIPE_SECRET_KEY ||
+    'sk_test_your_stripe_test_secret_key_in_the_env_file',
   publishableKey:
     process.env.STRIPE_PUBLISHABLE_KEY ||
-    'pk_test_your_stripe_test_publishable_key_here',
+    'pk_test_your_stripe_test_publishable_key_in_the_env_file',
 
   // Stripe configuration
-  apiVersion: '2025-09-30.clover' as const,
+  apiVersion: '2025-10-29.clover' as const,
   currency: 'eur',
 
   // Test card numbers for development

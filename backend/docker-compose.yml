@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:13
+    container_name: frituur-db
+    restart: always
+    environment:
+      POSTGRES_DB: frituur
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - '5433:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build: .
+    restart: always
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - postgres
+    command: npm run start:dev
+    environment:
+      - DATABASE_PORT=5432
+    env_file:
+      - .env
+
+volumes:
+  postgres_data:

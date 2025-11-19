@@ -16,16 +16,16 @@ describe('I18nInterceptor', () => {
     const ctx = createContext({ lang: 'nl' }, {});
     const next = { handle: jest.fn().mockReturnValue('ok') } as any;
 
-    interceptor.intercept(ctx as any, next);
-    expect((ctx.switchToHttp().getRequest() as any).locale).toBe('nl');
+    interceptor.intercept(ctx, next);
+    expect(ctx.switchToHttp().getRequest().locale).toBe('nl');
   });
 
   it('sets locale from accept-language header when no query', () => {
     const ctx = createContext({}, { 'accept-language': 'en-US,en;q=0.9' });
     const next = { handle: jest.fn().mockReturnValue('ok') } as any;
 
-    interceptor.intercept(ctx as any, next);
+    interceptor.intercept(ctx, next);
 
-    expect((ctx.switchToHttp().getRequest() as any).locale).toBe('en-US');
+    expect(ctx.switchToHttp().getRequest().locale).toBe('en-US');
   });
 });

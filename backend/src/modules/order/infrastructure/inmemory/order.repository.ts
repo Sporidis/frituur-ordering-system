@@ -57,11 +57,11 @@ export class InMemoryOrderRepository implements OrderRepository {
       order.updateStatus(status);
     } else {
       // Fallback for plain object (should not happen, but for safety)
-      (order as Order).status = status;
+      order.status = status;
       if (status === OrderStatus.IN_PROGRESS) {
-        (order as Order).estimatedReadyTime = new Date(Date.now() + 10 * 60000);
+        order.estimatedReadyTime = new Date(Date.now() + 10 * 60000);
       } else if (status === OrderStatus.READY) {
-        (order as Order).estimatedReadyTime = new Date();
+        order.estimatedReadyTime = new Date();
       }
     }
 

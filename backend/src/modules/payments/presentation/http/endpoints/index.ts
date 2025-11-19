@@ -8,7 +8,6 @@ import { HandleWebhookEndpoint } from './handle-webhook.endpoint';
 import { ProcessPaymentEndpoint } from './process-payment.endpoint';
 import { SyncStatusEndpoint } from './sync-status.endpoint';
 
-
 export const PAYMENT_HTTP_ENDPOINTS = [
   CreatePaymentIntentEndpoint,
   GetPaymentIntentEndpoint,

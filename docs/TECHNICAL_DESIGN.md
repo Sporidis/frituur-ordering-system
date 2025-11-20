@@ -67,6 +67,8 @@ graph LR
         D[Payments<br/>Handle Money]
         E[Kitchen<br/>Order Queue]
         F[Languages<br/>Dutch & English]
+        G[Auth<br/>Login & Security]
+        H[Users<br/>User Management]
     end
     
     A --> B
@@ -76,6 +78,7 @@ graph LR
     F --> B
     F --> D
     F --> E
+    G --> H
 ```
 
 ### Catalog Module
@@ -121,6 +124,24 @@ graph LR
 - Dutch language support
 - English language support
 - Language switching (change language anytime)
+
+### Auth Module
+
+**What it does**: Handles authentication and authorization
+
+- Admin login (username and password)
+- JWT token generation and validation
+- Protected routes for admin-only features
+- Role-based access control
+
+### Users Module
+
+**What it does**: Manages user accounts
+
+- User entity management
+- User creation and seeding
+- User data persistence
+- Integration with Auth module
 
 ---
 
@@ -416,6 +437,8 @@ graph TD
     D --> D3[payments/<br/>Payment Handling]
     D --> D4[kitchen/<br/>Kitchen Workflow]
     D --> D5[i18n/<br/>Language Support]
+    D --> D6[auth/<br/>Authentication & Authorization]
+    D --> D7[users/<br/>User Management]
     
     E --> E1[database/<br/>Database Connection]
     E --> E2[websocket/<br/>Real-time Updates]
@@ -434,6 +457,8 @@ graph TD
 | **payments** | Processes payments with Stripe | Customers paying |
 | **kitchen** | Manages order queue and status | Kitchen staff |
 | **i18n** | Handles Dutch/English switching | All users |
+| **auth** | Handles authentication and authorization | Admins logging in |
+| **users** | Manages user accounts and data | System and admins |
 
 ---
 
@@ -559,5 +584,3 @@ This technical design shows how I'm building a professional, scalable frituur or
 - 🔒 **Secure payments** - Industry-standard security
 - 📱 **Cross-platform** - Works on web and mobile
 - 🧪 **Well-tested** - Reliable and maintainable
-
-**Ready to build something awesome! 🚀**

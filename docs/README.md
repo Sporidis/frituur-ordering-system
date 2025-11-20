@@ -60,6 +60,7 @@ graph TB
 ```
 
 **Why These Tools?**
+
 - **Flutter**: One codebase for web and mobile (saves time!)
 - **NestJS**: Great TypeScript support, built-in features
 - **PostgreSQL**: Reliable database with JSON support for multilingual content
@@ -77,6 +78,7 @@ I've streamlined the documentation to focus on what matters most:
 | **[IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md)** | 6-week timeline with daily breakdown | Daily planning and progress tracking |
 
 ### 📋 Research Deliverables Completed
+
 ✅ **Research Objective** - Clear problem definition and success metrics  
 ✅ **Stakeholders & Context** - User personas and use case scenarios  
 ✅ **Core Concepts** - 8 key concepts with academic sources  
@@ -89,6 +91,7 @@ I've streamlined the documentation to focus on what matters most:
 ✅ **Alternatives Considered** - Rejected options with rationale
 
 ### 🎨 Documentation Features
+
 - **Visual Elements**: Mermaid diagrams and tables for better understanding
 - **Academic Rigor**: Proper citations and evidence-based decisions
 - **Professional Quality**: Suitable for academic evaluation and industry review
@@ -96,6 +99,7 @@ I've streamlined the documentation to focus on what matters most:
 ## 🚀 Quick Start (How to Run This)
 
 ### What You Need First
+
 - **Node.js 18+** (for the backend)
 - **Flutter 3.16+** (for the frontend)
 - **PostgreSQL 14+** (for the database)
@@ -125,7 +129,9 @@ npm run seed
 ```
 
 ### Configuration
+
 Copy the example environment file and add your settings:
+
 ```bash
 cp env.example .env
 # Then edit .env with your database and Stripe info
@@ -157,6 +163,10 @@ graph TB
         subgraph "i18n"
             E[Dutch<br/>English<br/>Language Switching]
         end
+        
+        subgraph "Auth"
+            G[Login<br/>JWT Tokens<br/>Authorization]
+        end
     end
     
     F[PostgreSQL Database] --> A
@@ -164,9 +174,11 @@ graph TB
     F --> C
     F --> D
     F --> E
+    F --> G
 ```
 
 **Why This Architecture?**
+
 - **Easy to understand**: Each "room" has one job
 - **Easy to test**: Test each room separately
 - **Easy to maintain**: Change one room without breaking others
@@ -175,6 +187,7 @@ graph TB
 ## 🧪 Testing (Making Sure It Works)
 
 ### Backend Tests
+
 ```bash
 cd backend
 npm run test              # Test individual functions
@@ -183,6 +196,7 @@ npm run test:cov          # See how much is tested
 ```
 
 ### Frontend Tests
+
 ```bash
 cd frontend
 flutter test              # Test UI components
@@ -192,6 +206,7 @@ flutter test integration_test/  # Test user interactions
 ## 🚀 Deployment (Making It Live)
 
 ### Easy Docker Setup
+
 ```bash
 # Start everything at once
 docker-compose up -d
@@ -223,4 +238,3 @@ docker-compose down
 ## License
 
 This project is open source under the MIT License - see the [LICENSE](LICENSE) file for details.
-

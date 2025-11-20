@@ -32,6 +32,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved quote functionality from Pricing module to Order module
 - Updated all module imports and dependencies to reflect OrderModule renaming
 - Updated architecture documentation to reflect module restructuring
+- Updated documentation to reflect actual module structure: removed Pricing module references, added Auth and Users modules
+- Updated RESEARCH.md: Changed PoC 4 from "Modular Monolith Structure" to "Admin Authentication (JWT)" to match actual implementation
+- Updated TECHNICAL_DESIGN.md: Added Auth and Users module descriptions and diagrams
+- Updated TECHNICAL_SPECIFICATION.md: Added Users module to module breakdown, clarified pricing is handled in Order module
+- Updated README.md: Added Auth module to architecture diagram (Users module excluded as infrastructure/support module)
 
 ### Deprecated
 

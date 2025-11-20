@@ -4,14 +4,14 @@
 
 - [🍟 Frituur Ordering System - Research Documentation](#-frituur-ordering-system---research-documentation)
   - [📋 Table of Contents](#-table-of-contents)
-  - [1. 🎯 Research Objective](#1--research-objective)
+  - [1. Research Objective](#1-research-objective)
     - [Research Objective Statement](#research-objective-statement)
     - [Problem Definition](#problem-definition)
     - [Target Users](#target-users)
     - [Success Metrics](#success-metrics)
     - [Scope Definition](#scope-definition)
     - [Solo Development Feasibility](#solo-development-feasibility)
-  - [2. 👥 Stakeholders \& Context](#2--stakeholders--context)
+  - [2. Stakeholders \& Context](#2-stakeholders--context)
     - [Stakeholder Analysis](#stakeholder-analysis)
     - [Primary Use Cases](#primary-use-cases)
   - [3. Core Concepts to Master](#3-core-concepts-to-master)
@@ -45,7 +45,7 @@
     - [PoC 1: Flutter i18n Implementation](#poc-1-flutter-i18n-implementation)
     - [PoC 2: NestJS + WebSocket Integration](#poc-2-nestjs--websocket-integration)
     - [PoC 3: Stripe Payment Integration](#poc-3-stripe-payment-integration)
-    - [PoC 4: Modular Monolith Structure](#poc-4-modular-monolith-structure)
+    - [PoC 4: Admin Authentication (JWT)](#poc-4-admin-authentication-jwt)
     - [PoC Implementation Timeline](#poc-implementation-timeline)
     - [Risk Mitigation for PoCs](#risk-mitigation-for-pocs)
     - [Evidence Collection Strategy](#evidence-collection-strategy)
@@ -65,12 +65,14 @@
 
 ---
 
-## 1. 🎯 Research Objective
+## 1. Research Objective
 
 ### Research Objective Statement
+
 **Objective**: Design and implement a comprehensive frituur ordering system that provides real-time order tracking, multilingual support (Dutch/English), and efficient kitchen workflow management for both customers and staff. The system will demonstrate modern full-stack development practices using Flutter, NestJS, and PostgreSQL in a modular monolith architecture, serving as a comprehensive Software Engineering project for academic evaluation.
 
 ### Problem Definition
+
 Traditional frituur ordering systems lack real-time updates, multilingual support, and efficient kitchen workflow management. Customers need reliable ready time estimates and seamless ordering experience, while staff need clear order management and stock control.
 
 ### Target Users
@@ -203,7 +205,7 @@ graph TD
 
 ---
 
-## 2. 👥 Stakeholders & Context
+## 2. Stakeholders & Context
 
 ### Stakeholder Analysis
 
@@ -312,88 +314,104 @@ sequenceDiagram
 ## 3. Core Concepts to Master
 
 ### 1. Domain-Driven Design (DDD)
+
 **Definition**: Software development approach focusing on core business logic using common language between developers and domain experts.
 
 **Key Principles**: Ubiquitous Language, Bounded Contexts, Domain Entities, Value Objects, Domain Services
 
 **Sources**:
+
 - Evans, Eric. "Domain-Driven Design: Tackling Complexity in the Heart of Software." Addison-Wesley, 2003.
 - Vernon, Vaughn. "Implementing Domain-Driven Design." Addison-Wesley, 2013.
 
 **Application**: Menu items, orders, and payments as domain entities with business rules.
 
 ### 2. Ports and Adapters (Hexagonal Architecture)
+
 **Definition**: Architectural pattern isolating core business logic from external concerns using ports (interfaces) and adapters (implementations).
 
 **Key Components**: Ports (interfaces), Adapters (implementations), Domain Core (pure business logic), Application Services (orchestration)
 
 **Sources**:
-- Cockburn, Alistair. "Hexagonal Architecture." 2005. https://alistair.cockburn.us/hexagonal-architecture/
+
+- Cockburn, Alistair. "Hexagonal Architecture." 2005. <https://alistair.cockburn.us/hexagonal-architecture/>
 - Freeman, Steve & Pryce, Nat. "Growing Object-Oriented Software, Guided by Tests." Addison-Wesley, 2009.
 
 **Application**: Stripe payment, PostgreSQL database, and WebSocket adapters isolated from business logic.
 
 ### 3. Modular Monolith Architecture
+
 **Definition**: Single deployable application with well-defined modules providing modularity benefits without distributed system complexity.
 
 **Key Characteristics**: Module Boundaries, Shared Database, Internal Communication, Single Deployment Unit
 
 **Sources**:
-- Grzybek, Kamil. "Modular Monolith Primer." 2020. https://www.kamilgrzybek.com/design/modular-monolith-primer/
-- Fowler, Martin. "MonolithFirst." 2015. https://martinfowler.com/bliki/MonolithFirst.html
 
-**Application**: Six modules (Catalog, Ordering, Pricing, Payments, Kitchen, i18n) with clear boundaries.
+- Grzybek, Kamil. "Modular Monolith Primer." 2020. <https://www.kamilgrzybek.com/design/modular-monolith-primer/>
+- Fowler, Martin. "MonolithFirst." 2015. <https://martinfowler.com/bliki/MonolithFirst.html>
+
+**Application**: Seven modules (Catalog, Ordering, Payments, Kitchen, Auth, i18n, Users) with clear boundaries.
 
 ### 4. Event-Driven Architecture
+
 **Definition**: Architectural pattern where components communicate through events rather than direct method calls, promoting loose coupling.
 
 **Key Patterns**: Domain Events, Event Sourcing, CQRS, Event Bus
 
 **Sources**:
-- Fowler, Martin. "What do you mean by 'Event-Driven'?" 2017. https://martinfowler.com/articles/201701-event-driven.html
-- Vernon, Vaughn. "Domain Events." 2013. https://martinfowler.com/eaaDev/DomainEvent.html
+
+- Fowler, Martin. "What do you mean by 'Event-Driven'?" 2017. <https://martinfowler.com/articles/201701-event-driven.html>
+- Vernon, Vaughn. "Domain Events." 2013. <https://martinfowler.com/eaaDev/DomainEvent.html>
 
 **Application**: Order status changes, payment confirmations, and stock updates trigger events for real-time notifications.
 
 ### 5. Real-time Communication with WebSockets
+
 **Definition**: Communication protocol providing full-duplex channels over single TCP connection for real-time data exchange.
 
 **Key Features**: Low Latency, Bidirectional, Persistent Connection, Event-driven
 
 **Sources**:
-- Fette, Ian & Melnikov, Alexey. "The WebSocket Protocol." RFC 6455, 2011. https://tools.ietf.org/html/rfc6455
-- MDN Web Docs. "WebSocket API." https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API
+
+- Fette, Ian & Melnikov, Alexey. "The WebSocket Protocol." RFC 6455, 2011. <https://tools.ietf.org/html/rfc6455>
+- MDN Web Docs. "WebSocket API." <https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API>
 
 **Application**: Real-time order status updates, kitchen queue changes, and stock availability notifications.
 
 ### 6. Internationalization (i18n) and Localization (l10n)
+
 **Definition**: Process of designing applications to support multiple languages and cultural conventions.
 
 **Key Components**: Externalization, Pluralization, Date/Time Formatting, Number Formatting, RTL Support
 
 **Sources**:
-- Flutter Team. "Internationalizing Flutter apps." https://docs.flutter.dev/development/accessibility-and-localization/internationalization
-- Unicode Consortium. "Unicode Locale Data Markup Language (LDML)." https://unicode.org/reports/tr35/
+
+- Flutter Team. "Internationalizing Flutter apps." <https://docs.flutter.dev/development/accessibility-and-localization/internationalization>
+- Unicode Consortium. "Unicode Locale Data Markup Language (LDML)." <https://unicode.org/reports/tr35/>
 
 **Application**: Dutch and English language support for all user-facing text, menu items, and system messages.
 
 ### 7. Payment Processing and PCI Compliance
+
 **Definition**: Secure handling of financial transactions with adherence to Payment Card Industry Data Security Standards.
 
 **Key Principles**: Tokenization, Encryption, Access Control, Audit Logging
 
 **Sources**:
+
 - PCI Security Standards Council. "Payment Card Industry (PCI) Data Security Standard." Version 4.0, 2022.
-- Stripe Documentation. "Security Best Practices." https://stripe.com/docs/security
+- Stripe Documentation. "Security Best Practices." <https://stripe.com/docs/security>
 
 **Application**: Stripe integration for secure payment processing without storing card data locally.
 
 ### 8. Queue Management and Time Estimation
+
 **Definition**: Mathematical modeling and algorithmic approaches to predict service completion times based on current workload and system capacity.
 
 **Key Concepts**: Queueing Theory, Little's Law, Service Time Distribution, Capacity Planning
 
 **Sources**:
+
 - Gross, Donald & Harris, Carl M. "Fundamentals of Queueing Theory." 4th Edition, Wiley, 2008.
 - Kleinrock, Leonard. "Queueing Systems, Volume 1: Theory." Wiley, 1975.
 
@@ -417,7 +435,7 @@ sequenceDiagram
 | **Documentation** | 8/10 (Good) | 10/10 (Excellent) | 9/10 (Very good) | 9/10 (Very good) | 10% | **React: 1.0** |
 | **Total Weighted Score** | | | | | | **Flutter: 8.1** |
 
-**Evidence**: 
+**Evidence**:
 
 - Flutter performance benchmarks show 60fps on both web and mobile (Flutter Performance Guide, 2023)
 - React requires separate React Native for mobile, doubling development effort
@@ -683,10 +701,11 @@ graph TB
         subgraph "Modules"
             CAT[Catalog Module]
             ORD[Ordering Module]
-            PRC[Pricing Module]
             PAY[Payments Module]
             KIT[Kitchen Module]
+            AUTH[Auth Module]
             I18N[i18n Module]
+            USR[Users Module]
         end
     end
     
@@ -728,6 +747,7 @@ graph TD
 ```
 
 ### PoC 1: Flutter i18n Implementation
+
 **Goal**: Validate multilingual support in Flutter for Dutch/English switching
 
 **Implementation Details**:
@@ -765,6 +785,7 @@ graph TD
 **Evidence Required**: Screenshot of language switching, performance metrics
 
 ### PoC 2: NestJS + WebSocket Integration
+
 **Goal**: Validate real-time communication between frontend and backend
 
 **Implementation Details**:
@@ -811,6 +832,7 @@ class WebSocketService {
 **Evidence Required**: WebSocket connection logs, latency measurements, connection stability test results
 
 ### PoC 3: Stripe Payment Integration
+
 **Goal**: Validate secure payment processing with Stripe
 
 **Implementation Details**:
@@ -856,45 +878,66 @@ Future<void> processPayment(String clientSecret) async {
 **Risk Level**: High
 **Evidence Required**: Successful test payment receipt, webhook confirmation logs, error handling test results
 
-### PoC 4: Modular Monolith Structure
-**Goal**: Validate clean module boundaries and communication patterns
+### PoC 4: Admin Authentication (JWT)
+
+**Goal**: Validate secure authentication and authorization for admin users
 
 **Implementation Details**:
 
 ```typescript
-// Catalog Module
+// Auth Module
 @Module({
-  imports: [TypeOrmModule.forFeature([MenuItem, Category])],
-  controllers: [CatalogController],
-  providers: [CatalogService, MenuItemRepository],
-  exports: [CatalogService],
+  imports: [
+    UsersModule,
+    PassportModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '60m' },
+      }),
+      inject: [ConfigService],
+    }),
+  ],
+  providers: [AuthService, JwtStrategy, LocalStrategy],
+  controllers: [AuthController],
+  exports: [AuthService],
 })
-export class CatalogModule {}
+export class AuthModule {}
 
-// Ordering Module
-@Module({
-  imports: [CatalogModule],
-  controllers: [OrderController],
-  providers: [OrderService, OrderRepository],
-  exports: [OrderService],
-})
-export class OrderingModule {
-  constructor(private catalogService: CatalogService) {}
+// Auth Controller
+@Controller('auth')
+export class AuthController {
+  @UseGuards(AuthGuard('local'))
+  @Post('login')
+  async login(@Request() req) {
+    return this.authService.login(req.user);
+  }
+}
+
+// JWT Guard for protected routes
+@UseGuards(JwtAuthGuard)
+@Get('protected')
+async getProtectedData() {
+  // Only accessible with valid JWT token
 }
 ```
 
 **Success Criteria**:
 
-- [x] Modules can be imported/exported cleanly
-- [x] No circular dependencies
-- [x] Clear separation of concerns
-- [ ] Business logic isolated in domain layer
-- [x] Repository pattern implemented correctly
-- [x] Unit tests can test modules in isolation
+- [x] Admin can log in with username and password
+- [x] JWT token is generated and returned on successful login
+- [x] Protected routes require valid JWT token
+- [x] Role-based access control works (ADMIN role)
+- [x] Password hashing with bcrypt
+- [x] Token expiration and validation
+- [x] Database seeder creates default admin user
 
 **Expected Timeline**: 2-3 hours
 **Risk Level**: Low
-**Evidence Required**: Module dependency graph, unit test results, code structure screenshots
+**Evidence Required**: Login endpoint test results, JWT token validation, protected route access tests
+
+**Note**: The modular monolith structure was validated and implemented as part of the overall architecture. All modules (Catalog, Order, Payments, Kitchen, Auth, i18n, Users) follow clean module boundaries with proper dependency injection and separation of concerns.
 
 ### PoC Implementation Timeline
 
@@ -903,7 +946,7 @@ export class OrderingModule {
 | **Flutter i18n** | Critical | Day 1 (2-3h) | None | Language switching works |
 | **NestJS + WebSocket** | Critical | Day 2 (3-4h) | None | Real-time updates <500ms |
 | **Stripe Payment** | Critical | Day 3 (4-5h) | Stripe account | Test payment succeeds |
-| **Modular Structure** | High | Day 4 (2-3h) | None | Clean module boundaries |
+| **Admin Authentication** | High | Day 4 (2-3h) | None | JWT login and protected routes work |
 
 ### Risk Mitigation for PoCs
 
